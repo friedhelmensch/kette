@@ -1210,7 +1210,7 @@ Start with only Milestone 1 and Milestone 2.
 Suggested prompt:
 
 ```text
-Implement Milestones 1 and 2 from IMPLEMENTATION_PLAN.md.
+Implement Milestones 1 and 2 from IMPLEMENTATION_PLAN_KETTE.md.
 
 Build a native iOS 26+ SwiftUI application.
 
@@ -1232,7 +1232,7 @@ Requirements:
 After this is working, continue with:
 
 ```text
-Implement Milestone 3 from IMPLEMENTATION_PLAN.md.
+Implement Milestone 3 from IMPLEMENTATION_PLAN_KETTE.md.
 
 Add the RoutingService abstraction and BRouterService implementation.
 Fetch a bicycle route from BRouter as GeoJSON and display it as a MapPolyline.

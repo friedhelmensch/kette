@@ -35,7 +35,7 @@ xcodebuild test -project KETTE.xcodeproj -scheme KETTE \
   CODE_SIGNING_ALLOWED=NO
 ```
 
-The implementation plan is in `IMPLEMENTATION_PLAN_BikeNav.md` (historical filename).
+The implementation plan is in [IMPLEMENTATION_PLAN_KETTE.md](IMPLEMENTATION_PLAN_KETTE.md).
 Milestones 1–5 cover map/location, destination search, bicycle routing, route
 preview, and basic foreground navigation. Start follows the cyclist and shows the
 next maneuver, distance to it, remaining distance, and estimated remaining time.
