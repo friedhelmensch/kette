@@ -4,6 +4,11 @@ import CoreLocation
 
 @MainActor
 final class MapViewModelTests: XCTestCase {
+    func testLocationPermissionExplanationIsEnglish() {
+        XCTAssertEqual(Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") as? String,
+                       "KETTE needs your location to show your position on the map.")
+    }
+
     func testAppCanBeInstalledOnIOS26() {
         XCTAssertEqual(Bundle.main.object(forInfoDictionaryKey: "MinimumOSVersion") as? String, "26.0")
     }

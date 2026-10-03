@@ -263,10 +263,9 @@
 			};
 			buildConfigurationList = 862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "KETTE" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = de;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				de,
 				en,
 				Base,
 			);
@@ -429,7 +428,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE needs your location to show your position on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -480,7 +479,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE needs your location to show your position on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

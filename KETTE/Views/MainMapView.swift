@@ -59,8 +59,8 @@ struct MainMapView: View {
                             .frame(width: 44, height: 44)
                             .background(.regularMaterial, in: Circle())
                     }
-                    .accessibilityLabel("Position folgen")
-                    .accessibilityValue(model.isFollowingPosition ? "Aktiv" : "Pausiert")
+                    .accessibilityLabel("Follow location")
+                    .accessibilityValue(model.isFollowingPosition ? "Active" : "Paused")
                     .accessibilityIdentifier("resumeFollowing")
                     MapCompass(scope: mapScope)
                 }
@@ -128,7 +128,7 @@ struct MainMapView: View {
                     .padding(.horizontal)
                     .padding(.top, 8)
             } else {
-                Text("Standort wird ermittelt …")
+                Text("Finding your location …")
                     .padding()
                     .background(.regularMaterial, in: Capsule())
             }
@@ -143,10 +143,10 @@ struct MainMapView: View {
     private var bottomPanel: some View {
         if model.locationDenied {
             VStack(spacing: 8) {
-                Text("Erlaube den Standortzugriff, um deine Position auf der Karte zu sehen.")
+                Text("Allow location access to see your position on the map.")
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
-                Button("Einstellungen öffnen") {
+                Button("Open Settings") {
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         openURL(url)
                     }
@@ -157,9 +157,9 @@ struct MainMapView: View {
             .padding()
         } else if model.isRouting {
             VStack(spacing: 8) {
-                ProgressView(model.isRerouting ? "Route wird neu berechnet …" : "Route wird berechnet …")
+                ProgressView(model.isRerouting ? "Recalculating route …" : "Calculating route …")
                 if model.isNavigating {
-                    Button("Beenden", action: model.stopNavigation)
+                    Button("End", action: model.stopNavigation)
                         .accessibilityIdentifier("stopNavigation")
                 }
             }
@@ -170,11 +170,11 @@ struct MainMapView: View {
             VStack(spacing: 8) {
                 Text(error)
                     .font(.subheadline)
-                Button("Erneut versuchen") {
+                Button("Try again") {
                     Task { await model.calculateRoute() }
                 }
                 if model.isNavigating {
-                    Button("Beenden", action: model.stopNavigation)
+                    Button("End", action: model.stopNavigation)
                         .accessibilityIdentifier("stopNavigation")
                 }
             }
@@ -187,7 +187,7 @@ struct MainMapView: View {
             HStack {
                 Label("Navigation", systemImage: "location.fill")
                 Spacer()
-                Button("Beenden", action: model.stopNavigation)
+                Button("End", action: model.stopNavigation)
                     .accessibilityIdentifier("stopNavigation")
             }
             .padding()
@@ -196,7 +196,7 @@ struct MainMapView: View {
         } else if let route = model.route, !model.isSearching {
             RoutePreviewCard(preview: RoutePreview(route: route), start: model.startNavigation)
         } else if model.currentCoordinate == nil {
-            Label("Standort wird ermittelt …", systemImage: "location")
+            Label("Finding your location …", systemImage: "location")
                 .font(.subheadline)
                 .padding()
                 .background(.regularMaterial, in: Capsule())

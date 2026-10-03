@@ -22,7 +22,7 @@ final class KETTEUITests: XCTestCase {
             let restored = try renderedCameraAngles(map)
             XCTAssertEqual(restored.heading, original.heading, accuracy: 1)
             XCTAssertEqual(restored.pitch, 45, accuracy: 1)
-            XCTAssertEqual(app.buttons["resumeFollowing"].value as? String, "Aktiv")
+            XCTAssertEqual(app.buttons["resumeFollowing"].value as? String, "Active")
         }
     }
 
@@ -45,20 +45,20 @@ final class KETTEUITests: XCTestCase {
         app.buttons["startNavigation"].tap()
         let arrow = app.buttons["resumeFollowing"]
         XCTAssertTrue(arrow.waitForExistence(timeout: 3))
-        XCTAssertEqual(arrow.value as? String, "Aktiv")
+        XCTAssertEqual(arrow.value as? String, "Active")
         let remainingDistance = app.staticTexts["remainingDistance"]
         waitForDistanceChange(remainingDistance)
-        XCTAssertEqual(arrow.value as? String, "Aktiv")
+        XCTAssertEqual(arrow.value as? String, "Active")
         let map = app.otherElements["mainMap"]
         map.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
             .press(forDuration: 0.1, thenDragTo: map.coordinate(withNormalizedOffset: CGVector(dx: 0.55, dy: 0.5)))
-        XCTAssertTrue(NSPredicate(format: "value == %@", "Pausiert").evaluate(with: arrow))
+        XCTAssertTrue(NSPredicate(format: "value == %@", "Paused").evaluate(with: arrow))
         waitForDistanceChange(remainingDistance)
-        XCTAssertEqual(arrow.value as? String, "Pausiert")
+        XCTAssertEqual(arrow.value as? String, "Paused")
         arrow.tap()
-        XCTAssertEqual(arrow.value as? String, "Aktiv")
+        XCTAssertEqual(arrow.value as? String, "Active")
         waitForDistanceChange(remainingDistance)
-        XCTAssertEqual(arrow.value as? String, "Aktiv")
+        XCTAssertEqual(arrow.value as? String, "Active")
         XCTAssertTrue(app.buttons["stopNavigation"].isHittable)
     }
 
@@ -109,11 +109,13 @@ final class KETTEUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["routeDistance"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.staticTexts["routeDistance"].label, "12,4 km")
         XCTAssertEqual(app.staticTexts["routeDuration"].label, "42 min")
+        XCTAssertEqual(app.buttons["startNavigation"].label, "Start")
         app.buttons["startNavigation"].tap()
         XCTAssertTrue(app.buttons["stopNavigation"].waitForExistence(timeout: 3))
+        XCTAssertEqual(app.buttons["stopNavigation"].label, "End")
         XCTAssertFalse(app.buttons["startNavigation"].exists)
         XCTAssertTrue(app.staticTexts["nextManeuver"].waitForExistence(timeout: 3))
-        XCTAssertEqual(app.staticTexts["nextManeuver"].label, "Links abbiegen")
+        XCTAssertEqual(app.staticTexts["nextManeuver"].label, "Turn left")
         XCTAssertEqual(app.staticTexts["remainingDistance"].label, "12,4 km")
         XCTAssertEqual(app.staticTexts["remainingDuration"].label, "42 min")
         app.buttons["stopNavigation"].tap()
@@ -131,6 +133,6 @@ final class KETTEUITests: XCTestCase {
         search.typeText("Berlin")
         XCTAssertTrue(app.buttons["cancelSearch"].exists)
         app.buttons["cancelSearch"].tap()
-        XCTAssertEqual(search.value as? String, "Wohin?")
+        XCTAssertEqual(search.value as? String, "Where to?")
     }
 }

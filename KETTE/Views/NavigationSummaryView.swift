@@ -16,7 +16,7 @@ struct NavigationSummaryView: View {
             }
             .monospacedDigit()
             Spacer()
-            Button("Beenden", action: stop)
+            Button("End", action: stop)
                 .accessibilityIdentifier("stopNavigation")
         }
         .padding()

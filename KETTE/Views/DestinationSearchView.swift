@@ -9,13 +9,13 @@ struct DestinationSearchView: View {
             HStack(spacing: 12) {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
-                TextField("Wohin?", text: $model.query)
+                TextField("Where to?", text: $model.query)
                     .accessibilityIdentifier("destinationSearch")
                     .focused($focused)
                     .autocorrectionDisabled()
                     .submitLabel(.search)
                 if model.isSearching {
-                    Button("Abbrechen") {
+                    Button("Cancel") {
                         focused = false
                         model.cancelSearch()
                     }
@@ -26,14 +26,14 @@ struct DestinationSearchView: View {
 
             if model.isSearching {
                 if model.isResolving {
-                    ProgressView("Ziel wird geladen …")
+                    ProgressView("Loading destination …")
                         .padding()
                 } else if let error = model.searchError {
                     Text(error)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .padding()
-                    Button("Erneut versuchen") {
+                    Button("Try again") {
                         let query = model.query
                         model.query = query
                     }

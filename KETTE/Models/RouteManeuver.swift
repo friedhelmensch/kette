@@ -16,23 +16,23 @@ struct RouteManeuver: Sendable {
 extension RouteManeuver {
     var instruction: String {
         switch type {
-        case .straight: "Geradeaus"
-        case .left: "Links abbiegen"
-        case .right: "Rechts abbiegen"
-        case .slightLeft: "Leicht links abbiegen"
-        case .slightRight: "Leicht rechts abbiegen"
-        case .sharpLeft: "Scharf links abbiegen"
-        case .sharpRight: "Scharf rechts abbiegen"
-        case .keepLeft: "Links halten"
-        case .keepRight: "Rechts halten"
-        case .uTurn: "Wenden"
+        case .straight: "Continue straight"
+        case .left: "Turn left"
+        case .right: "Turn right"
+        case .slightLeft: "Turn slightly left"
+        case .slightRight: "Turn slightly right"
+        case .sharpLeft: "Turn sharply left"
+        case .sharpRight: "Turn sharply right"
+        case .keepLeft: "Keep left"
+        case .keepRight: "Keep right"
+        case .uTurn: "Make a U-turn"
         case .roundabout:
             if let exit = roundaboutExit, exit > 0 {
-                "Im Kreisverkehr die \(exit). Ausfahrt nehmen"
+                "At the roundabout, take exit \(exit)"
             } else {
-                "Dem Kreisverkehr folgen"
+                "Continue around the roundabout"
             }
-        case .destination: "Zum Ziel"
+        case .destination: "Continue to your destination"
         }
     }
 

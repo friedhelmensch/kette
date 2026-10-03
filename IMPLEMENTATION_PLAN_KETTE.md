@@ -86,19 +86,11 @@ iPhone App
 
 Do NOT create a custom backend for the first version.
 
-Later production architecture may become:
+Use BRouter's public HTTP service directly for the first public release.
+KETTE will not run its own backend or routing infrastructure.
 
-```text
-iPhone
-   │
-   ▼
-Own API
-   │
-   ▼
-Own BRouter instance
-```
-
-The app architecture must therefore hide BRouter behind a protocol/service abstraction so the routing implementation can be changed later without rewriting the UI.
+Keep the existing `RoutingService` boundary so the endpoint or provider can be
+changed if necessary, without rewriting the UI.
 
 ---
 
@@ -1001,68 +993,37 @@ Optionally provide a compile-time DEBUG overlay later.
 
 # 31. BRouter Hosting Strategy
 
-## Prototype
+Use `https://brouter.de/brouter` directly for development and the first public
+release. Running our own BRouter server is not a release requirement.
 
-Use an available BRouter HTTP endpoint for development/testing.
+The official website presents BRouter-Web as a public online routing service.
+A 2015 maintainer response directed a third-party app developer to the HTTP API:
+https://groups.google.com/g/osm-android-bikerouting/c/ghi7lu2ZjdU
 
-## Before public release
+As checked on 2026-10-03, no explicit request quota, third-party app prohibition,
+or availability guarantee was found in the official pages reviewed. This does
+not establish unlimited use or current approval for an App Store app. Confirm
+acceptable app usage and request volume with the maintainers before release.
 
-Do not depend indefinitely on a third-party hobby/community BRouter service.
+Keep requests limited to route calculation and necessary rerouting. Preserve
+existing rerouting cooldown and error handling. Include BRouter and OpenStreetMap
+credits and explain the third-party routing service in the privacy policy.
 
-Preferred production setup:
+BRouter's privacy policy says routing coordinates, IP addresses, timestamps,
+requested resources, and user agents are logged for two weeks, with an additional
+ten days in hosting-provider backups:
+https://brouter.de/privacypolicy.html
 
-```text
-Own hosted BRouter
-```
-
-or:
-
-```text
-iPhone
-  ↓
-small own API
-  ↓
-own BRouter
-```
-
-Reasons:
-
-- reliability
-- rate control
-- routing profile control
-- predictable availability
-- ability to change infrastructure later
-
-An ASP.NET Core API can be added later if required.
-
-Do not build it for Milestone 1.
+KETTE does not store location history locally; this does not mean the routing
+server does not retain location data.
 
 ---
 
-# 32. Future Backend Option
+# 32. Backend Scope
 
-If a backend is introduced, use a very small API.
-
-Example:
-
-```http
-GET /api/routes
-    ?fromLat=
-    &fromLon=
-    &toLat=
-    &toLon=
-```
-
-Backend responsibilities:
-
-- validate input
-- call BRouter
-- control routing profile
-- normalize BRouter output
-- rate-limit if necessary
-- hide infrastructure details
-
-The iOS app should still depend only on `RoutingService`.
+Do not build or operate a KETTE backend for the first public release.
+If the public service becomes unsuitable, evaluate another hosted routing
+provider through the existing `RoutingService` boundary.
 
 ---
 

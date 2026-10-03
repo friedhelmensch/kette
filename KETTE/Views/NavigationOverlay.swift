@@ -10,11 +10,11 @@ struct NavigationOverlay: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
                 if let distance = progress.distanceToNextManeuverMeters {
-                    Text(distance <= 10 ? "Jetzt" : "In \(RoutePreview.distanceText(meters: distance))")
+                    Text(distance <= 10 ? "Now" : "In \(RoutePreview.distanceText(meters: distance))")
                         .font(.title3.weight(.semibold))
                         .accessibilityIdentifier("maneuverDistance")
                 }
-                Text(progress.nextManeuver?.instruction ?? "Route folgen")
+                Text(progress.nextManeuver?.instruction ?? "Follow the route")
                     .font(.headline)
                     .accessibilityIdentifier("nextManeuver")
             }

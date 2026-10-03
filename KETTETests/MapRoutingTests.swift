@@ -42,7 +42,7 @@ final class MapRoutingTests: XCTestCase {
         let (model, routing) = makeModel()
         routing.error = .noRoute
         await model.select(suggestion)
-        XCTAssertEqual(model.routeError, "Keine Fahrradroute gefunden.")
+        XCTAssertEqual(model.routeError, "No bicycle route found.")
     }
 
     func testStartRequiresACalculatedRoute() {

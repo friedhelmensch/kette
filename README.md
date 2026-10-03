@@ -23,7 +23,7 @@ The current `de.kette.KETTE` identifier is a development placeholder.
 
 Follow `AGENTS.md`: write a failing test before implementing each behavior.
 Unit tests use injected location, search, and routing services. UI tests exercise
-the native map/search controls and the preview's Start/Beenden flow. A Debug-only
+the native map/search controls and the preview's Start/End flow. A Debug-only
 fixed route fixture makes the preview UI test independent of GPS and networking;
 normal launches use the live services. Live Apple search needs internet access.
 
@@ -39,7 +39,7 @@ The implementation plan is in [IMPLEMENTATION_PLAN_KETTE.md](IMPLEMENTATION_PLAN
 Milestones 1–5 cover map/location, destination search, bicycle routing, route
 preview, and basic foreground navigation. Start follows the cyclist and shows the
 next maneuver, distance to it, remaining distance, and estimated remaining time.
-Beenden returns to the preview. Automatic rerouting is included. Voice, background
+End returns to the preview. Automatic rerouting is included. Voice, background
 navigation, and arrival handling follow in later increments.
 
 Navigation projects GPS coordinates onto route segments and caches cumulative
@@ -53,12 +53,20 @@ new route from the current location to the same destination. Requests have a
 20-second cooldown. Navigation keeps running while the route is recalculated;
 a failed request preserves the previous route and can be retried.
 
-Routing uses the public prototype endpoint `https://brouter.de/brouter` with the
+Routing uses the public endpoint `https://brouter.de/brouter` with the
 `trekking` profile. Selecting a destination sends the starting and destination
 coordinates to that endpoint. Rerouting sends the updated starting coordinate and
-the original destination. No location history is stored. The endpoint can be
-changed through `BRouterService`'s initializer; use owned infrastructure before
-public release. Tests inject responses rather than calling the public server.
+the original destination. KETTE stores no location history locally. BRouter's
+[privacy policy](https://brouter.de/privacypolicy.html) states that routing
+coordinates and request metadata, including IP addresses, are logged for two
+weeks, plus ten additional days in hosting-provider backups.
+
+The first public release is planned to use this service directly, without a KETTE
+backend. Confirm acceptable app usage and request volume with the maintainers
+before release; no explicit quota or availability guarantee was found in the
+official pages reviewed on 2026-10-03. The endpoint can be changed through
+`BRouterService`'s initializer. Tests inject responses rather than calling the
+public server.
 
 ## Manual integration checks
 
@@ -70,18 +78,18 @@ public release. Tests inject responses rather than calling the public server.
 - With a simulated location selected in Xcode, choose Potsdamer Platz and verify
   a blue bicycle route appears and the camera fits the full route. Check the bottom
   preview's distance and estimated duration. Tap Start to follow your position,
-  then Beenden to return to the complete route preview.
+  then End to return to the complete route preview.
 - To simulate movement, run the app, select Potsdamer Platz and tap Start. Choose
   `Berlin-Testfahrt` from Xcode's Debug → Simulate Location menu. The fixed ride in
   `Fixtures/Berlin-Testfahrt.gpx` pauses for 30 seconds, then follows a public Berlin
   sample route for about eight minutes. Check that turn distances and remaining
   totals change. The selected Apple destination may differ slightly from the
-  fixture endpoint. Stop manually with Beenden when finished.
+  fixture endpoint. Stop manually with End when finished.
 - During navigation, verify the map is tilted and the route ahead points up in
   portrait and landscape. The camera direction updates after a turn.
 - Follow a different simulated ride from the calculated route. After three valid
   off-route fixes, verify “Route wird neu berechnet …” appears, then the route and
-  instructions change while navigation stays active. Beenden also works while
+  instructions change while navigation stays active. End also works while
   waiting for the new route. With networking disabled, the old route is retained.
 - Cancel a search and retry. Check search failures with networking disabled.
 

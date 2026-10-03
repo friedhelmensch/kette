@@ -39,7 +39,7 @@ final class DestinationSearchService: NSObject, DestinationSearching, @preconcur
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         guard completer === self.completer else { return }
         suggestions = []
-        errorMessage = "Suche fehlgeschlagen. Bitte erneut versuchen."
+        errorMessage = "Search failed. Please try again."
         onChange?()
     }
 

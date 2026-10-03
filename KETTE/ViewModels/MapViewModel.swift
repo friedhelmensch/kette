@@ -158,7 +158,7 @@ final class MapViewModel {
             // Cancelling or replacing a search is a normal interaction.
         } catch {
             if selectionID == requestID, !Task.isCancelled {
-                searchError = "Ziel konnte nicht geladen werden. Bitte erneut versuchen."
+                searchError = "Could not load destination. Please try again."
             }
         }
         if selectionID == requestID { isResolving = false }
@@ -191,8 +191,8 @@ final class MapViewModel {
             guard !task.isCancelled else { return }
             if !(error is CancellationError) {
                 routeError = error as? RoutingError == .noRoute
-                    ? "Keine Fahrradroute gefunden."
-                    : "Route konnte nicht berechnet werden."
+                    ? "No bicycle route found."
+                    : "Could not calculate route."
             }
         }
         isRouting = false
