@@ -4,6 +4,10 @@ import CoreLocation
 
 @MainActor
 final class MapViewModelTests: XCTestCase {
+    func testAppCanBeInstalledOnIOS26() {
+        XCTAssertEqual(Bundle.main.object(forInfoDictionaryKey: "MinimumOSVersion") as? String, "26.0")
+    }
+
     func testAppSupportsPortraitAndBothLandscapeOrientations() {
         let orientations = Bundle.main.object(forInfoDictionaryKey: "UISupportedInterfaceOrientations") as? [String] ?? []
         XCTAssertTrue(orientations.contains("UIInterfaceOrientationPortrait"))
@@ -112,6 +116,7 @@ final class MapViewModelTests: XCTestCase {
 
 @MainActor
 final class FakeLocationService: LocationProviding {
+    var course: Double?
     var authorization: CLAuthorizationStatus = .notDetermined
     var coordinate: CLLocationCoordinate2D?
     var onChange: (() -> Void)?

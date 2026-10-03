@@ -6,4 +6,5 @@ struct RouteProgress {
     let nextManeuver: RouteManeuver?
     let distanceToNextManeuverMeters: Double?
     let remainingDurationSeconds: Double
+    let routeHeadingDegrees: Double
 }

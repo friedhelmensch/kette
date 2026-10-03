@@ -3,6 +3,11 @@ import CoreLocation
 @testable import KETTE
 
 final class RouteProgressCalculatorTests: XCTestCase {
+    func testRouteHeadingPointsEastThenNorthAfterTurn() throws {
+        XCTAssertEqual(try progress(at: coordinates[0]).routeHeadingDegrees, 90, accuracy: 0.1)
+        XCTAssertEqual(try progress(at: CLLocationCoordinate2D(latitude: 0.0005, longitude: 0.001)).routeHeadingDegrees, 0, accuracy: 0.1)
+    }
+
     func testStartOfRoute() throws {
         let progress = try progress(at: coordinates[0])
         XCTAssertEqual(progress.traveledDistanceMeters, 0, accuracy: 0.01)

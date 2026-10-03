@@ -5,6 +5,7 @@ protocol LocationProviding: AnyObject {
     var authorization: CLAuthorizationStatus { get }
     var coordinate: CLLocationCoordinate2D? { get }
     var horizontalAccuracy: Double? { get }
+    var course: Double? { get }
     var onChange: (() -> Void)? { get set }
     func requestPermission()
     func startUpdates()

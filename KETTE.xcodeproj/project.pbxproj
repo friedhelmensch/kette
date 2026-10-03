@@ -1,104 +1,550 @@
 // !$*UTF8*$!
-{ archiveVersion = 1; classes = {}; objectVersion = 56; objects = {
-AABBCC001122334455667701 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "KETTE/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
-AABBCC001122334455667702 = {isa = PBXBuildFile; fileRef = AABBCC001122334455667701; };
-06AD342F662B4111609E394A = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Fixtures/Berlin-Testfahrt.gpx"; sourceTree = SOURCE_ROOT; };
-3648D3C581C5A5229FADA7FA = {isa = PBXGroup; name = Fixtures; children = (06AD342F662B4111609E394A); sourceTree = "<group>"; };
-EDCF861A5791E3C1C34522BD = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/App/KETTEApp.swift"; sourceTree = SOURCE_ROOT; };
-D9DA00BE3080B7EFF34D679E = {isa = PBXBuildFile; fileRef = EDCF861A5791E3C1C34522BD; };
-C92270DFD237C8D04E8BA2A9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/App/PreviewFixture.swift"; sourceTree = SOURCE_ROOT; };
-496D0F07FCB6DE2F8DCFEC6B = {isa = PBXBuildFile; fileRef = C92270DFD237C8D04E8BA2A9; };
-8D477CDDAC2A06801D1F9310 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Models/BicycleRoute.swift"; sourceTree = SOURCE_ROOT; };
-C8BA3683FBC0A7CF8A2D910C = {isa = PBXBuildFile; fileRef = 8D477CDDAC2A06801D1F9310; };
-FA3F182E694E8739280C3819 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Models/Destination.swift"; sourceTree = SOURCE_ROOT; };
-7D03146F6A2E208AF30E05FE = {isa = PBXBuildFile; fileRef = FA3F182E694E8739280C3819; };
-B0437049F1A055E39183FC03 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Models/RouteManeuver.swift"; sourceTree = SOURCE_ROOT; };
-13B937E9771050344705AD31 = {isa = PBXBuildFile; fileRef = B0437049F1A055E39183FC03; };
-EB8647C569D0D6CB5A175676 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Models/RouteProgress.swift"; sourceTree = SOURCE_ROOT; };
-99F9C4A0CEF4421FB30DCBEB = {isa = PBXBuildFile; fileRef = EB8647C569D0D6CB5A175676; };
-64E6302FE90EC60F68C16725 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Navigation/NavigationEngine.swift"; sourceTree = SOURCE_ROOT; };
-B34EDE500208AA71C01A3FBD = {isa = PBXBuildFile; fileRef = 64E6302FE90EC60F68C16725; };
-F78D54B658A5DAD2992C7547 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Navigation/RouteGeometry.swift"; sourceTree = SOURCE_ROOT; };
-2786FA2F939DC3BF34E08D78 = {isa = PBXBuildFile; fileRef = F78D54B658A5DAD2992C7547; };
-D6B40531517649543009D300 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Navigation/RouteMatcher.swift"; sourceTree = SOURCE_ROOT; };
-0928A352F315FDB6685D4D12 = {isa = PBXBuildFile; fileRef = D6B40531517649543009D300; };
-D873E5BDC1FDE8210D1870F3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Navigation/RouteProgressCalculator.swift"; sourceTree = SOURCE_ROOT; };
-A7E2458258B52A602F082BB4 = {isa = PBXBuildFile; fileRef = D873E5BDC1FDE8210D1870F3; };
-F65B99E60BCB1459D0CE5954 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Services/BRouterService.swift"; sourceTree = SOURCE_ROOT; };
-841A1256E33BA37461665A64 = {isa = PBXBuildFile; fileRef = F65B99E60BCB1459D0CE5954; };
-1CB9948F0FFE2135FAD90100 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Services/DestinationSearchService.swift"; sourceTree = SOURCE_ROOT; };
-D872A6D8994F132BB8BF1851 = {isa = PBXBuildFile; fileRef = 1CB9948F0FFE2135FAD90100; };
-86AE9EFC68B3D9814E50B2BC = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Services/LocationService.swift"; sourceTree = SOURCE_ROOT; };
-5BE697E730AFDAD09D971B97 = {isa = PBXBuildFile; fileRef = 86AE9EFC68B3D9814E50B2BC; };
-FB4C46F6911CB628CED96717 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Services/RoutingService.swift"; sourceTree = SOURCE_ROOT; };
-77CAF3BF504ACC29AD42018B = {isa = PBXBuildFile; fileRef = FB4C46F6911CB628CED96717; };
-8151396D6312BC38B391CA27 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Services/ServiceProtocols.swift"; sourceTree = SOURCE_ROOT; };
-EC27B453A9EF12E9418D55BC = {isa = PBXBuildFile; fileRef = 8151396D6312BC38B391CA27; };
-91CBCBE9BD84BC3601167D20 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/ViewModels/MapViewModel.swift"; sourceTree = SOURCE_ROOT; };
-1F6EE44CB37400EA6D2562DE = {isa = PBXBuildFile; fileRef = 91CBCBE9BD84BC3601167D20; };
-BB955E605686F08A01637CB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/ViewModels/RoutePreview.swift"; sourceTree = SOURCE_ROOT; };
-7397871309FAE891EE168625 = {isa = PBXBuildFile; fileRef = BB955E605686F08A01637CB3; };
-2DD27DCBC5901CBF9CDB311C = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Views/DestinationSearchView.swift"; sourceTree = SOURCE_ROOT; };
-B3148941443944ABE7E2898F = {isa = PBXBuildFile; fileRef = 2DD27DCBC5901CBF9CDB311C; };
-74F9E6979CB5731FDFD9F44A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Views/MainMapView.swift"; sourceTree = SOURCE_ROOT; };
-AC6EF2F0CBA665EE9550DE79 = {isa = PBXBuildFile; fileRef = 74F9E6979CB5731FDFD9F44A; };
-A77A86F95234C78D743C1CB3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Views/NavigationOverlay.swift"; sourceTree = SOURCE_ROOT; };
-B31F52E89405C9D89630C00A = {isa = PBXBuildFile; fileRef = A77A86F95234C78D743C1CB3; };
-3A043066567906BB2B0A872D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Views/NavigationSummaryView.swift"; sourceTree = SOURCE_ROOT; };
-D1AD5057D31CA46C6D6EBEF7 = {isa = PBXBuildFile; fileRef = 3A043066567906BB2B0A872D; };
-9DE01FCC021B481DEF83D1E2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTE/Views/RoutePreviewCard.swift"; sourceTree = SOURCE_ROOT; };
-B88CE00C68826AAD9110AE77 = {isa = PBXBuildFile; fileRef = 9DE01FCC021B481DEF83D1E2; };
-24FE3C813BE8DF1D8C7A6276 = {isa = PBXGroup; children = (AABBCC001122334455667701,EDCF861A5791E3C1C34522BD,C92270DFD237C8D04E8BA2A9,8D477CDDAC2A06801D1F9310,FA3F182E694E8739280C3819,B0437049F1A055E39183FC03,EB8647C569D0D6CB5A175676,64E6302FE90EC60F68C16725,F78D54B658A5DAD2992C7547,D6B40531517649543009D300,D873E5BDC1FDE8210D1870F3,F65B99E60BCB1459D0CE5954,1CB9948F0FFE2135FAD90100,86AE9EFC68B3D9814E50B2BC,FB4C46F6911CB628CED96717,8151396D6312BC38B391CA27,91CBCBE9BD84BC3601167D20,BB955E605686F08A01637CB3,2DD27DCBC5901CBF9CDB311C,74F9E6979CB5731FDFD9F44A,A77A86F95234C78D743C1CB3,3A043066567906BB2B0A872D,9DE01FCC021B481DEF83D1E2);  sourceTree = "<group>"; };
-29FCF5DF0D973A6AEACE2D5C = {isa = PBXFileReference; explicitFileType = wrapper.application; path = KETTE.app; sourceTree = BUILT_PRODUCTS_DIR; };
-45B33D742ED56ED3A3F5C91B = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (D9DA00BE3080B7EFF34D679E,496D0F07FCB6DE2F8DCFEC6B,C8BA3683FBC0A7CF8A2D910C,7D03146F6A2E208AF30E05FE,13B937E9771050344705AD31,99F9C4A0CEF4421FB30DCBEB,B34EDE500208AA71C01A3FBD,2786FA2F939DC3BF34E08D78,0928A352F315FDB6685D4D12,A7E2458258B52A602F082BB4,841A1256E33BA37461665A64,D872A6D8994F132BB8BF1851,5BE697E730AFDAD09D971B97,77CAF3BF504ACC29AD42018B,EC27B453A9EF12E9418D55BC,1F6EE44CB37400EA6D2562DE,7397871309FAE891EE168625,B3148941443944ABE7E2898F,AC6EF2F0CBA665EE9550DE79,B31F52E89405C9D89630C00A,D1AD5057D31CA46C6D6EBEF7,B88CE00C68826AAD9110AE77); runOnlyForDeploymentPostprocessing = 0; };
-C52730F321AB6A144F76869F = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-E8FFB8A0141F9A9EBC61934D = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (AABBCC001122334455667702); runOnlyForDeploymentPostprocessing = 0; };
-D20928E2582966B7CF367DFE = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTE; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; INFOPLIST_KEY_CFBundleDisplayName = KETTE; INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen."; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; }; name = Debug; };
-55B90CB8B5EDCE0AA942CA90 = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTE; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; INFOPLIST_KEY_CFBundleDisplayName = KETTE; INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen."; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; }; name = Release; };
-614216D09506F9BE32809118 = {isa = XCConfigurationList; buildConfigurations = (D20928E2582966B7CF367DFE,55B90CB8B5EDCE0AA942CA90); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-E685B1A1A4D6954E0FEAC41D = {isa = PBXNativeTarget; buildConfigurationList = 614216D09506F9BE32809118; buildPhases = (45B33D742ED56ED3A3F5C91B,C52730F321AB6A144F76869F,E8FFB8A0141F9A9EBC61934D); buildRules = (); dependencies = (); name = KETTE; productName = KETTE; productReference = 29FCF5DF0D973A6AEACE2D5C; productType = "com.apple.product-type.application"; };
-D7357937ACCF4E124B87F7D3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/BRouterServiceTests.swift"; sourceTree = SOURCE_ROOT; };
-01E6E252D153433D24E25489 = {isa = PBXBuildFile; fileRef = D7357937ACCF4E124B87F7D3; };
-D98153EF2EFCB825E5C968B3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/MapNavigationTests.swift"; sourceTree = SOURCE_ROOT; };
-12F712C63DD2A554F3DF11BE = {isa = PBXBuildFile; fileRef = D98153EF2EFCB825E5C968B3; };
-AE0D05403CD7E73C6DD1B886 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/MapRoutingTests.swift"; sourceTree = SOURCE_ROOT; };
-A8D411658E87017C7B355681 = {isa = PBXBuildFile; fileRef = AE0D05403CD7E73C6DD1B886; };
-D7EA8DB050C530C34E9A249F = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/MapViewModelTests.swift"; sourceTree = SOURCE_ROOT; };
-AFE5FA5002ECDA2E8DB98F68 = {isa = PBXBuildFile; fileRef = D7EA8DB050C530C34E9A249F; };
-A84B26ADB05055F635B74C40 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/RouteMatcherTests.swift"; sourceTree = SOURCE_ROOT; };
-7E9645BA2917D8BA0F1D4239 = {isa = PBXBuildFile; fileRef = A84B26ADB05055F635B74C40; };
-6E3D1080693735C21E477266 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/RoutePreviewTests.swift"; sourceTree = SOURCE_ROOT; };
-957BF10A6081434B892058F7 = {isa = PBXBuildFile; fileRef = 6E3D1080693735C21E477266; };
-B30BFABAA05D053DACA1BAEB = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTETests/RouteProgressCalculatorTests.swift"; sourceTree = SOURCE_ROOT; };
-2668A6FCB7BCC01A0F630FCA = {isa = PBXBuildFile; fileRef = B30BFABAA05D053DACA1BAEB; };
-EAD1329B7BE6FC33559D0ED6 = {isa = PBXGroup; children = (D7357937ACCF4E124B87F7D3,D98153EF2EFCB825E5C968B3,AE0D05403CD7E73C6DD1B886,D7EA8DB050C530C34E9A249F,A84B26ADB05055F635B74C40,6E3D1080693735C21E477266,B30BFABAA05D053DACA1BAEB);  sourceTree = "<group>"; };
-54B085B27B23DE6D00373912 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KETTETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-AA4C5C5EB233A36A1D879DA0 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (01E6E252D153433D24E25489,12F712C63DD2A554F3DF11BE,A8D411658E87017C7B355681,AFE5FA5002ECDA2E8DB98F68,7E9645BA2917D8BA0F1D4239,957BF10A6081434B892058F7,2668A6FCB7BCC01A0F630FCA); runOnlyForDeploymentPostprocessing = 0; };
-07A22931A0164FE6FBE4E32A = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-B14276ED2C846F31671BEA33 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-2D7C8A7FFC584609D2F4B6AD = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTETests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KETTE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KETTE"; BUNDLE_LOADER = "$(TEST_HOST)"; }; name = Debug; };
-4AAF34B2DF813059DE6AE28A = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTETests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KETTE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KETTE"; BUNDLE_LOADER = "$(TEST_HOST)"; }; name = Release; };
-FCBCB1E661F5EE8D88C84CFE = {isa = XCConfigurationList; buildConfigurations = (2D7C8A7FFC584609D2F4B6AD,4AAF34B2DF813059DE6AE28A); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-3DF739CDB762CA66F5FCB04C = {isa = PBXContainerItemProxy; containerPortal = 98F54143AB4E86B28C3AFEE0; proxyType = 1; remoteGlobalIDString = E685B1A1A4D6954E0FEAC41D; remoteInfo = KETTE; };
-F8034D34D2B88943DAA10057 = {isa = PBXTargetDependency; target = E685B1A1A4D6954E0FEAC41D; targetProxy = 3DF739CDB762CA66F5FCB04C; };
-72E046077FF11E19DE466515 = {isa = PBXNativeTarget; buildConfigurationList = FCBCB1E661F5EE8D88C84CFE; buildPhases = (AA4C5C5EB233A36A1D879DA0,07A22931A0164FE6FBE4E32A,B14276ED2C846F31671BEA33); buildRules = (); dependencies = (F8034D34D2B88943DAA10057); name = KETTETests; productName = KETTETests; productReference = 54B085B27B23DE6D00373912; productType = "com.apple.product-type.bundle.unit-test"; };
-F8624869F1CB48AFFB6607C2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KETTEUITests/KETTEUITests.swift"; sourceTree = SOURCE_ROOT; };
-4C224033308AA31306CE0769 = {isa = PBXBuildFile; fileRef = F8624869F1CB48AFFB6607C2; };
-BE40234763DF459CDE565D14 = {isa = PBXGroup; children = (F8624869F1CB48AFFB6607C2);  sourceTree = "<group>"; };
-99514BA92824C5512A1622B2 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KETTEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-D6392FC4510F0F39D5D74A25 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (4C224033308AA31306CE0769); runOnlyForDeploymentPostprocessing = 0; };
-82850BCD41659FA0FC84A4DB = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-68497488544AA1E10DC12557 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-7651F877B34A47A446715A12 = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTEUITests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; TEST_TARGET_NAME = KETTE; }; name = Debug; };
-41511D7DC873D5365C0D2221 = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = "$(TARGET_NAME)"; PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTEUITests; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; IPHONEOS_DEPLOYMENT_TARGET = 27.0; TARGETED_DEVICE_FAMILY = 1; CODE_SIGN_STYLE = Automatic; SWIFT_STRICT_CONCURRENCY = complete; TEST_TARGET_NAME = KETTE; }; name = Release; };
-AA32E89286BB630B6CD97242 = {isa = XCConfigurationList; buildConfigurations = (7651F877B34A47A446715A12,41511D7DC873D5365C0D2221); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-68064F43A42DEB9ABDC97187 = {isa = PBXContainerItemProxy; containerPortal = 98F54143AB4E86B28C3AFEE0; proxyType = 1; remoteGlobalIDString = E685B1A1A4D6954E0FEAC41D; remoteInfo = KETTE; };
-DA9B52D62AF4941C578C7047 = {isa = PBXTargetDependency; target = E685B1A1A4D6954E0FEAC41D; targetProxy = 68064F43A42DEB9ABDC97187; };
-C97E62AD9DA7101C1DE521A1 = {isa = PBXNativeTarget; buildConfigurationList = AA32E89286BB630B6CD97242; buildPhases = (D6392FC4510F0F39D5D74A25,82850BCD41659FA0FC84A4DB,68497488544AA1E10DC12557); buildRules = (); dependencies = (DA9B52D62AF4941C578C7047); name = KETTEUITests; productName = KETTEUITests; productReference = 99514BA92824C5512A1622B2; productType = "com.apple.product-type.bundle.ui-testing"; };
-D83A561CD747EDCF660E3076 = {isa = PBXGroup; children = (29FCF5DF0D973A6AEACE2D5C,54B085B27B23DE6D00373912,99514BA92824C5512A1622B2);  sourceTree = "<group>"; };
-6AF5DB3440F6E7C34700B128 = {isa = PBXGroup; children = (24FE3C813BE8DF1D8C7A6276,EAD1329B7BE6FC33559D0ED6,BE40234763DF459CDE565D14,D83A561CD747EDCF660E3076,3648D3C581C5A5229FADA7FA);  sourceTree = "<group>"; };
-89E1FD6268CC0F221A2BE178 = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; ENABLE_TESTABILITY = YES; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; GCC_PREPROCESSOR_DEFINITIONS = ("DEBUG=1", "$(inherited)");}; name = Debug; };
-E6DE6C99132752C914FEF632 = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; SWIFT_OPTIMIZATION_LEVEL = "-O";}; name = Release; };
-862894B703A6DEDF96A9DD6C = {isa = XCConfigurationList; buildConfigurations = (89E1FD6268CC0F221A2BE178,E6DE6C99132752C914FEF632); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-98F54143AB4E86B28C3AFEE0 = {isa = PBXProject; attributes = {LastUpgradeCheck = 2700; }; buildConfigurationList = 862894B703A6DEDF96A9DD6C; compatibilityVersion = "Xcode 14.0"; developmentRegion = de; knownRegions = (de, en, Base); mainGroup = 6AF5DB3440F6E7C34700B128; productRefGroup = D83A561CD747EDCF660E3076; projectDirPath = ""; projectRoot = ""; targets = (E685B1A1A4D6954E0FEAC41D,72E046077FF11E19DE466515,C97E62AD9DA7101C1DE521A1); };
-}; rootObject = 98F54143AB4E86B28C3AFEE0; }
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01E6E252D153433D24E25489 /* KETTETests/BRouterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7357937ACCF4E124B87F7D3 /* KETTETests/BRouterServiceTests.swift */; };
+		0928A352F315FDB6685D4D12 /* KETTE/Navigation/RouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B40531517649543009D300 /* KETTE/Navigation/RouteMatcher.swift */; };
+		12F712C63DD2A554F3DF11BE /* KETTETests/MapNavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98153EF2EFCB825E5C968B3 /* KETTETests/MapNavigationTests.swift */; };
+		13B937E9771050344705AD31 /* KETTE/Models/RouteManeuver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0437049F1A055E39183FC03 /* KETTE/Models/RouteManeuver.swift */; };
+		1F6EE44CB37400EA6D2562DE /* KETTE/ViewModels/MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CBCBE9BD84BC3601167D20 /* KETTE/ViewModels/MapViewModel.swift */; };
+		2668A6FCB7BCC01A0F630FCA /* KETTETests/RouteProgressCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BFABAA05D053DACA1BAEB /* KETTETests/RouteProgressCalculatorTests.swift */; };
+		2786FA2F939DC3BF34E08D78 /* KETTE/Navigation/RouteGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D54B658A5DAD2992C7547 /* KETTE/Navigation/RouteGeometry.swift */; };
+		496D0F07FCB6DE2F8DCFEC6B /* KETTE/App/PreviewFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92270DFD237C8D04E8BA2A9 /* KETTE/App/PreviewFixture.swift */; };
+		4C224033308AA31306CE0769 /* KETTEUITests/KETTEUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8624869F1CB48AFFB6607C2 /* KETTEUITests/KETTEUITests.swift */; };
+		5BE697E730AFDAD09D971B97 /* KETTE/Services/LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AE9EFC68B3D9814E50B2BC /* KETTE/Services/LocationService.swift */; };
+		7397871309FAE891EE168625 /* KETTE/ViewModels/RoutePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB955E605686F08A01637CB3 /* KETTE/ViewModels/RoutePreview.swift */; };
+		77CAF3BF504ACC29AD42018B /* KETTE/Services/RoutingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4C46F6911CB628CED96717 /* KETTE/Services/RoutingService.swift */; };
+		7D03146F6A2E208AF30E05FE /* KETTE/Models/Destination.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F182E694E8739280C3819 /* KETTE/Models/Destination.swift */; };
+		7E9645BA2917D8BA0F1D4239 /* KETTETests/RouteMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B26ADB05055F635B74C40 /* KETTETests/RouteMatcherTests.swift */; };
+		841A1256E33BA37461665A64 /* KETTE/Services/BRouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65B99E60BCB1459D0CE5954 /* KETTE/Services/BRouterService.swift */; };
+		957BF10A6081434B892058F7 /* KETTETests/RoutePreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3D1080693735C21E477266 /* KETTETests/RoutePreviewTests.swift */; };
+		99F9C4A0CEF4421FB30DCBEB /* KETTE/Models/RouteProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8647C569D0D6CB5A175676 /* KETTE/Models/RouteProgress.swift */; };
+		A7E2458258B52A602F082BB4 /* KETTE/Navigation/RouteProgressCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D873E5BDC1FDE8210D1870F3 /* KETTE/Navigation/RouteProgressCalculator.swift */; };
+		A8D411658E87017C7B355681 /* KETTETests/MapRoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0D05403CD7E73C6DD1B886 /* KETTETests/MapRoutingTests.swift */; };
+		AABBCC001122334455667702 /* KETTE/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABBCC001122334455667701 /* KETTE/Assets.xcassets */; };
+		AC6EF2F0CBA665EE9550DE79 /* KETTE/Views/MainMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F9E6979CB5731FDFD9F44A /* KETTE/Views/MainMapView.swift */; };
+		AFE5FA5002ECDA2E8DB98F68 /* KETTETests/MapViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EA8DB050C530C34E9A249F /* KETTETests/MapViewModelTests.swift */; };
+		B3148941443944ABE7E2898F /* KETTE/Views/DestinationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD27DCBC5901CBF9CDB311C /* KETTE/Views/DestinationSearchView.swift */; };
+		B31F52E89405C9D89630C00A /* KETTE/Views/NavigationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77A86F95234C78D743C1CB3 /* KETTE/Views/NavigationOverlay.swift */; };
+		B34EDE500208AA71C01A3FBD /* KETTE/Navigation/NavigationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E6302FE90EC60F68C16725 /* KETTE/Navigation/NavigationEngine.swift */; };
+		B88CE00C68826AAD9110AE77 /* KETTE/Views/RoutePreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE01FCC021B481DEF83D1E2 /* KETTE/Views/RoutePreviewCard.swift */; };
+		C8BA3683FBC0A7CF8A2D910C /* KETTE/Models/BicycleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D477CDDAC2A06801D1F9310 /* KETTE/Models/BicycleRoute.swift */; };
+		D1AD5057D31CA46C6D6EBEF7 /* KETTE/Views/NavigationSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A043066567906BB2B0A872D /* KETTE/Views/NavigationSummaryView.swift */; };
+		D872A6D8994F132BB8BF1851 /* KETTE/Services/DestinationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB9948F0FFE2135FAD90100 /* KETTE/Services/DestinationSearchService.swift */; };
+		D9DA00BE3080B7EFF34D679E /* KETTE/App/KETTEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCF861A5791E3C1C34522BD /* KETTE/App/KETTEApp.swift */; };
+		EC27B453A9EF12E9418D55BC /* KETTE/Services/ServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8151396D6312BC38B391CA27 /* KETTE/Services/ServiceProtocols.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3DF739CDB762CA66F5FCB04C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E685B1A1A4D6954E0FEAC41D;
+			remoteInfo = KETTE;
+		};
+		68064F43A42DEB9ABDC97187 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E685B1A1A4D6954E0FEAC41D;
+			remoteInfo = KETTE;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		06AD342F662B4111609E394A /* Fixtures/Berlin-Testfahrt.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Fixtures/Berlin-Testfahrt.gpx"; sourceTree = SOURCE_ROOT; };
+		1CB9948F0FFE2135FAD90100 /* KETTE/Services/DestinationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Services/DestinationSearchService.swift; sourceTree = SOURCE_ROOT; };
+		29FCF5DF0D973A6AEACE2D5C /* KETTE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = KETTE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DD27DCBC5901CBF9CDB311C /* KETTE/Views/DestinationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Views/DestinationSearchView.swift; sourceTree = SOURCE_ROOT; };
+		3A043066567906BB2B0A872D /* KETTE/Views/NavigationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Views/NavigationSummaryView.swift; sourceTree = SOURCE_ROOT; };
+		54B085B27B23DE6D00373912 /* KETTETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KETTETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		64E6302FE90EC60F68C16725 /* KETTE/Navigation/NavigationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Navigation/NavigationEngine.swift; sourceTree = SOURCE_ROOT; };
+		6E3D1080693735C21E477266 /* KETTETests/RoutePreviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/RoutePreviewTests.swift; sourceTree = SOURCE_ROOT; };
+		74F9E6979CB5731FDFD9F44A /* KETTE/Views/MainMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Views/MainMapView.swift; sourceTree = SOURCE_ROOT; };
+		8151396D6312BC38B391CA27 /* KETTE/Services/ServiceProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Services/ServiceProtocols.swift; sourceTree = SOURCE_ROOT; };
+		86AE9EFC68B3D9814E50B2BC /* KETTE/Services/LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Services/LocationService.swift; sourceTree = SOURCE_ROOT; };
+		8D477CDDAC2A06801D1F9310 /* KETTE/Models/BicycleRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Models/BicycleRoute.swift; sourceTree = SOURCE_ROOT; };
+		91CBCBE9BD84BC3601167D20 /* KETTE/ViewModels/MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/ViewModels/MapViewModel.swift; sourceTree = SOURCE_ROOT; };
+		99514BA92824C5512A1622B2 /* KETTEUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = KETTEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9DE01FCC021B481DEF83D1E2 /* KETTE/Views/RoutePreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Views/RoutePreviewCard.swift; sourceTree = SOURCE_ROOT; };
+		A77A86F95234C78D743C1CB3 /* KETTE/Views/NavigationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Views/NavigationOverlay.swift; sourceTree = SOURCE_ROOT; };
+		A84B26ADB05055F635B74C40 /* KETTETests/RouteMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/RouteMatcherTests.swift; sourceTree = SOURCE_ROOT; };
+		AABBCC001122334455667701 /* KETTE/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = KETTE/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		AE0D05403CD7E73C6DD1B886 /* KETTETests/MapRoutingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/MapRoutingTests.swift; sourceTree = SOURCE_ROOT; };
+		B0437049F1A055E39183FC03 /* KETTE/Models/RouteManeuver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Models/RouteManeuver.swift; sourceTree = SOURCE_ROOT; };
+		B30BFABAA05D053DACA1BAEB /* KETTETests/RouteProgressCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/RouteProgressCalculatorTests.swift; sourceTree = SOURCE_ROOT; };
+		BB955E605686F08A01637CB3 /* KETTE/ViewModels/RoutePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/ViewModels/RoutePreview.swift; sourceTree = SOURCE_ROOT; };
+		C92270DFD237C8D04E8BA2A9 /* KETTE/App/PreviewFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/App/PreviewFixture.swift; sourceTree = SOURCE_ROOT; };
+		D6B40531517649543009D300 /* KETTE/Navigation/RouteMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Navigation/RouteMatcher.swift; sourceTree = SOURCE_ROOT; };
+		D7357937ACCF4E124B87F7D3 /* KETTETests/BRouterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/BRouterServiceTests.swift; sourceTree = SOURCE_ROOT; };
+		D7EA8DB050C530C34E9A249F /* KETTETests/MapViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/MapViewModelTests.swift; sourceTree = SOURCE_ROOT; };
+		D873E5BDC1FDE8210D1870F3 /* KETTE/Navigation/RouteProgressCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Navigation/RouteProgressCalculator.swift; sourceTree = SOURCE_ROOT; };
+		D98153EF2EFCB825E5C968B3 /* KETTETests/MapNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTETests/MapNavigationTests.swift; sourceTree = SOURCE_ROOT; };
+		EB8647C569D0D6CB5A175676 /* KETTE/Models/RouteProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Models/RouteProgress.swift; sourceTree = SOURCE_ROOT; };
+		EDCF861A5791E3C1C34522BD /* KETTE/App/KETTEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/App/KETTEApp.swift; sourceTree = SOURCE_ROOT; };
+		F65B99E60BCB1459D0CE5954 /* KETTE/Services/BRouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Services/BRouterService.swift; sourceTree = SOURCE_ROOT; };
+		F78D54B658A5DAD2992C7547 /* KETTE/Navigation/RouteGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Navigation/RouteGeometry.swift; sourceTree = SOURCE_ROOT; };
+		F8624869F1CB48AFFB6607C2 /* KETTEUITests/KETTEUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTEUITests/KETTEUITests.swift; sourceTree = SOURCE_ROOT; };
+		FA3F182E694E8739280C3819 /* KETTE/Models/Destination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Models/Destination.swift; sourceTree = SOURCE_ROOT; };
+		FB4C46F6911CB628CED96717 /* KETTE/Services/RoutingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KETTE/Services/RoutingService.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07A22931A0164FE6FBE4E32A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		82850BCD41659FA0FC84A4DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C52730F321AB6A144F76869F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		24FE3C813BE8DF1D8C7A6276 = {
+			isa = PBXGroup;
+			children = (
+				AABBCC001122334455667701 /* KETTE/Assets.xcassets */,
+				EDCF861A5791E3C1C34522BD /* KETTE/App/KETTEApp.swift */,
+				C92270DFD237C8D04E8BA2A9 /* KETTE/App/PreviewFixture.swift */,
+				8D477CDDAC2A06801D1F9310 /* KETTE/Models/BicycleRoute.swift */,
+				FA3F182E694E8739280C3819 /* KETTE/Models/Destination.swift */,
+				B0437049F1A055E39183FC03 /* KETTE/Models/RouteManeuver.swift */,
+				EB8647C569D0D6CB5A175676 /* KETTE/Models/RouteProgress.swift */,
+				64E6302FE90EC60F68C16725 /* KETTE/Navigation/NavigationEngine.swift */,
+				F78D54B658A5DAD2992C7547 /* KETTE/Navigation/RouteGeometry.swift */,
+				D6B40531517649543009D300 /* KETTE/Navigation/RouteMatcher.swift */,
+				D873E5BDC1FDE8210D1870F3 /* KETTE/Navigation/RouteProgressCalculator.swift */,
+				F65B99E60BCB1459D0CE5954 /* KETTE/Services/BRouterService.swift */,
+				1CB9948F0FFE2135FAD90100 /* KETTE/Services/DestinationSearchService.swift */,
+				86AE9EFC68B3D9814E50B2BC /* KETTE/Services/LocationService.swift */,
+				FB4C46F6911CB628CED96717 /* KETTE/Services/RoutingService.swift */,
+				8151396D6312BC38B391CA27 /* KETTE/Services/ServiceProtocols.swift */,
+				91CBCBE9BD84BC3601167D20 /* KETTE/ViewModels/MapViewModel.swift */,
+				BB955E605686F08A01637CB3 /* KETTE/ViewModels/RoutePreview.swift */,
+				2DD27DCBC5901CBF9CDB311C /* KETTE/Views/DestinationSearchView.swift */,
+				74F9E6979CB5731FDFD9F44A /* KETTE/Views/MainMapView.swift */,
+				A77A86F95234C78D743C1CB3 /* KETTE/Views/NavigationOverlay.swift */,
+				3A043066567906BB2B0A872D /* KETTE/Views/NavigationSummaryView.swift */,
+				9DE01FCC021B481DEF83D1E2 /* KETTE/Views/RoutePreviewCard.swift */,
+			);
+			sourceTree = "<group>";
+		};
+		3648D3C581C5A5229FADA7FA /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				06AD342F662B4111609E394A /* Fixtures/Berlin-Testfahrt.gpx */,
+			);
+			name = Fixtures;
+			sourceTree = "<group>";
+		};
+		6AF5DB3440F6E7C34700B128 = {
+			isa = PBXGroup;
+			children = (
+				24FE3C813BE8DF1D8C7A6276,
+				EAD1329B7BE6FC33559D0ED6,
+				BE40234763DF459CDE565D14,
+				D83A561CD747EDCF660E3076,
+				3648D3C581C5A5229FADA7FA /* Fixtures */,
+			);
+			sourceTree = "<group>";
+		};
+		BE40234763DF459CDE565D14 = {
+			isa = PBXGroup;
+			children = (
+				F8624869F1CB48AFFB6607C2 /* KETTEUITests/KETTEUITests.swift */,
+			);
+			sourceTree = "<group>";
+		};
+		D83A561CD747EDCF660E3076 = {
+			isa = PBXGroup;
+			children = (
+				29FCF5DF0D973A6AEACE2D5C /* KETTE.app */,
+				54B085B27B23DE6D00373912 /* KETTETests.xctest */,
+				99514BA92824C5512A1622B2 /* KETTEUITests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+		EAD1329B7BE6FC33559D0ED6 = {
+			isa = PBXGroup;
+			children = (
+				D7357937ACCF4E124B87F7D3 /* KETTETests/BRouterServiceTests.swift */,
+				D98153EF2EFCB825E5C968B3 /* KETTETests/MapNavigationTests.swift */,
+				AE0D05403CD7E73C6DD1B886 /* KETTETests/MapRoutingTests.swift */,
+				D7EA8DB050C530C34E9A249F /* KETTETests/MapViewModelTests.swift */,
+				A84B26ADB05055F635B74C40 /* KETTETests/RouteMatcherTests.swift */,
+				6E3D1080693735C21E477266 /* KETTETests/RoutePreviewTests.swift */,
+				B30BFABAA05D053DACA1BAEB /* KETTETests/RouteProgressCalculatorTests.swift */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72E046077FF11E19DE466515 /* KETTETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCBCB1E661F5EE8D88C84CFE /* Build configuration list for PBXNativeTarget "KETTETests" */;
+			buildPhases = (
+				AA4C5C5EB233A36A1D879DA0 /* Sources */,
+				07A22931A0164FE6FBE4E32A /* Frameworks */,
+				B14276ED2C846F31671BEA33 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F8034D34D2B88943DAA10057 /* PBXTargetDependency */,
+			);
+			name = KETTETests;
+			productName = KETTETests;
+			productReference = 54B085B27B23DE6D00373912 /* KETTETests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C97E62AD9DA7101C1DE521A1 /* KETTEUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA32E89286BB630B6CD97242 /* Build configuration list for PBXNativeTarget "KETTEUITests" */;
+			buildPhases = (
+				D6392FC4510F0F39D5D74A25 /* Sources */,
+				82850BCD41659FA0FC84A4DB /* Frameworks */,
+				68497488544AA1E10DC12557 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA9B52D62AF4941C578C7047 /* PBXTargetDependency */,
+			);
+			name = KETTEUITests;
+			productName = KETTEUITests;
+			productReference = 99514BA92824C5512A1622B2 /* KETTEUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		E685B1A1A4D6954E0FEAC41D /* KETTE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 614216D09506F9BE32809118 /* Build configuration list for PBXNativeTarget "KETTE" */;
+			buildPhases = (
+				45B33D742ED56ED3A3F5C91B /* Sources */,
+				C52730F321AB6A144F76869F /* Frameworks */,
+				E8FFB8A0141F9A9EBC61934D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KETTE;
+			productName = KETTE;
+			productReference = 29FCF5DF0D973A6AEACE2D5C /* KETTE.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = 862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "KETTE" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+				en,
+				Base,
+			);
+			mainGroup = 6AF5DB3440F6E7C34700B128;
+			productRefGroup = D83A561CD747EDCF660E3076;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E685B1A1A4D6954E0FEAC41D /* KETTE */,
+				72E046077FF11E19DE466515 /* KETTETests */,
+				C97E62AD9DA7101C1DE521A1 /* KETTEUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		68497488544AA1E10DC12557 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B14276ED2C846F31671BEA33 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8FFB8A0141F9A9EBC61934D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AABBCC001122334455667702 /* KETTE/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		45B33D742ED56ED3A3F5C91B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9DA00BE3080B7EFF34D679E /* KETTE/App/KETTEApp.swift in Sources */,
+				496D0F07FCB6DE2F8DCFEC6B /* KETTE/App/PreviewFixture.swift in Sources */,
+				C8BA3683FBC0A7CF8A2D910C /* KETTE/Models/BicycleRoute.swift in Sources */,
+				7D03146F6A2E208AF30E05FE /* KETTE/Models/Destination.swift in Sources */,
+				13B937E9771050344705AD31 /* KETTE/Models/RouteManeuver.swift in Sources */,
+				99F9C4A0CEF4421FB30DCBEB /* KETTE/Models/RouteProgress.swift in Sources */,
+				B34EDE500208AA71C01A3FBD /* KETTE/Navigation/NavigationEngine.swift in Sources */,
+				2786FA2F939DC3BF34E08D78 /* KETTE/Navigation/RouteGeometry.swift in Sources */,
+				0928A352F315FDB6685D4D12 /* KETTE/Navigation/RouteMatcher.swift in Sources */,
+				A7E2458258B52A602F082BB4 /* KETTE/Navigation/RouteProgressCalculator.swift in Sources */,
+				841A1256E33BA37461665A64 /* KETTE/Services/BRouterService.swift in Sources */,
+				D872A6D8994F132BB8BF1851 /* KETTE/Services/DestinationSearchService.swift in Sources */,
+				5BE697E730AFDAD09D971B97 /* KETTE/Services/LocationService.swift in Sources */,
+				77CAF3BF504ACC29AD42018B /* KETTE/Services/RoutingService.swift in Sources */,
+				EC27B453A9EF12E9418D55BC /* KETTE/Services/ServiceProtocols.swift in Sources */,
+				1F6EE44CB37400EA6D2562DE /* KETTE/ViewModels/MapViewModel.swift in Sources */,
+				7397871309FAE891EE168625 /* KETTE/ViewModels/RoutePreview.swift in Sources */,
+				B3148941443944ABE7E2898F /* KETTE/Views/DestinationSearchView.swift in Sources */,
+				AC6EF2F0CBA665EE9550DE79 /* KETTE/Views/MainMapView.swift in Sources */,
+				B31F52E89405C9D89630C00A /* KETTE/Views/NavigationOverlay.swift in Sources */,
+				D1AD5057D31CA46C6D6EBEF7 /* KETTE/Views/NavigationSummaryView.swift in Sources */,
+				B88CE00C68826AAD9110AE77 /* KETTE/Views/RoutePreviewCard.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA4C5C5EB233A36A1D879DA0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01E6E252D153433D24E25489 /* KETTETests/BRouterServiceTests.swift in Sources */,
+				12F712C63DD2A554F3DF11BE /* KETTETests/MapNavigationTests.swift in Sources */,
+				A8D411658E87017C7B355681 /* KETTETests/MapRoutingTests.swift in Sources */,
+				AFE5FA5002ECDA2E8DB98F68 /* KETTETests/MapViewModelTests.swift in Sources */,
+				7E9645BA2917D8BA0F1D4239 /* KETTETests/RouteMatcherTests.swift in Sources */,
+				957BF10A6081434B892058F7 /* KETTETests/RoutePreviewTests.swift in Sources */,
+				2668A6FCB7BCC01A0F630FCA /* KETTETests/RouteProgressCalculatorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6392FC4510F0F39D5D74A25 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C224033308AA31306CE0769 /* KETTEUITests/KETTEUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA9B52D62AF4941C578C7047 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E685B1A1A4D6954E0FEAC41D /* KETTE */;
+			targetProxy = 68064F43A42DEB9ABDC97187 /* PBXContainerItemProxy */;
+		};
+		F8034D34D2B88943DAA10057 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E685B1A1A4D6954E0FEAC41D /* KETTE */;
+			targetProxy = 3DF739CDB762CA66F5FCB04C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2D7C8A7FFC584609D2F4B6AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KETTE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KETTE";
+			};
+			name = Debug;
+		};
+		41511D7DC873D5365C0D2221 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = KETTE;
+			};
+			name = Release;
+		};
+		4AAF34B2DF813059DE6AE28A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTETests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KETTE.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KETTE";
+			};
+			name = Release;
+		};
+		55B90CB8B5EDCE0AA942CA90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = H6883AE33D;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.kette;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7651F877B34A47A446715A12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.kette.KETTEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = KETTE;
+			};
+			name = Debug;
+		};
+		89E1FD6268CC0F221A2BE178 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D20928E2582966B7CF367DFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = H6883AE33D;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE benötigt deinen Standort, um deine Position auf der Karte anzuzeigen.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.kette;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E6DE6C99132752C914FEF632 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		614216D09506F9BE32809118 /* Build configuration list for PBXNativeTarget "KETTE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D20928E2582966B7CF367DFE /* Debug */,
+				55B90CB8B5EDCE0AA942CA90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "KETTE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89E1FD6268CC0F221A2BE178 /* Debug */,
+				E6DE6C99132752C914FEF632 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA32E89286BB630B6CD97242 /* Build configuration list for PBXNativeTarget "KETTEUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7651F877B34A47A446715A12 /* Debug */,
+				41511D7DC873D5365C0D2221 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCBCB1E661F5EE8D88C84CFE /* Build configuration list for PBXNativeTarget "KETTETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D7C8A7FFC584609D2F4B6AD /* Debug */,
+				4AAF34B2DF813059DE6AE28A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+}

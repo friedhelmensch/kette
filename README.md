@@ -1,13 +1,21 @@
 # KETTE
 
 Minimal native bicycle navigation for iPhone, built with SwiftUI and Apple frameworks.
-Targets iOS 27+ and Swift 6. Supports portrait and both landscape orientations.
+Targets iOS 26+ and Swift 6. Supports portrait and both landscape orientations.
+During navigation, the map follows the cyclist with a 45° tilt and points in the
+GPS direction of travel. If GPS supplies only positions, direction is calculated
+from successive accurate fixes at least 5 meters apart. Without a travel direction,
+the camera uses the current route segment's direction.
+Landscape navigation places the maneuver and remaining time/distance panels on
+the left to give the map more room; portrait uses the top and bottom.
+Moving the map manually pauses camera following. The arrow button resumes the
+navigation view; GPS progress and rerouting continue while browsing the map.
 No third-party dependencies.
 
 ## Open and run
 
 Open `KETTE.xcodeproj` in Xcode, select the shared **KETTE** scheme and an iPhone
-simulator running iOS 27, then Run. For a physical iPhone, select your own signing
+simulator running iOS 26 or newer, then Run. For a physical iPhone, select your own signing
 team and set a unique bundle identifier in the app target's Signing & Capabilities.
 The current `de.kette.KETTE` identifier is a development placeholder.
 
@@ -31,8 +39,8 @@ The implementation plan is in `IMPLEMENTATION_PLAN_BikeNav.md` (historical filen
 Milestones 1–5 cover map/location, destination search, bicycle routing, route
 preview, and basic foreground navigation. Start follows the cyclist and shows the
 next maneuver, distance to it, remaining distance, and estimated remaining time.
-Beenden returns to the preview. Voice, rerouting, background navigation, and
-arrival handling follow in later increments.
+Beenden returns to the preview. Automatic rerouting is included. Voice, background
+navigation, and arrival handling follow in later increments.
 
 Navigation projects GPS coordinates onto route segments and caches cumulative
 geometry distances once per route. It scales remaining distance and time by the
@@ -40,9 +48,15 @@ fraction of route geometry completed. GPS fixes with horizontal accuracy worse
 than 50 meters leave the previous progress intact. BRouter turn hints supply
 maneuvers and roundabout exits; street names are not included in these hints.
 
+Three consecutive valid GPS fixes more than 30 meters from the route trigger a
+new route from the current location to the same destination. Requests have a
+20-second cooldown. Navigation keeps running while the route is recalculated;
+a failed request preserves the previous route and can be retried.
+
 Routing uses the public prototype endpoint `https://brouter.de/brouter` with the
 `trekking` profile. Selecting a destination sends the starting and destination
-coordinates to that endpoint. No location history is stored. The endpoint can be
+coordinates to that endpoint. Rerouting sends the updated starting coordinate and
+the original destination. No location history is stored. The endpoint can be
 changed through `BRouterService`'s initializer; use owned infrastructure before
 public release. Tests inject responses rather than calling the public server.
 
@@ -63,6 +77,12 @@ public release. Tests inject responses rather than calling the public server.
   sample route for about eight minutes. Check that turn distances and remaining
   totals change. The selected Apple destination may differ slightly from the
   fixture endpoint. Stop manually with Beenden when finished.
+- During navigation, verify the map is tilted and the route ahead points up in
+  portrait and landscape. The camera direction updates after a turn.
+- Follow a different simulated ride from the calculated route. After three valid
+  off-route fixes, verify “Route wird neu berechnet …” appears, then the route and
+  instructions change while navigation stays active. Beenden also works while
+  waiting for the new route. With networking disabled, the old route is retained.
 - Cancel a search and retry. Check search failures with networking disabled.
 
 No background location permission or location history is used in this increment.

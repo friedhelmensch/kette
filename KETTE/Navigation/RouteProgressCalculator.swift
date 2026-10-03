@@ -1,3 +1,5 @@
+import Foundation
+
 struct RouteProgressCalculator {
     let route: BicycleRoute
     let geometry: RouteGeometry
@@ -8,6 +10,8 @@ struct RouteProgressCalculator {
         let nextManeuver = route.maneuvers.first {
             $0.distanceFromRouteStartMeters >= match.traveledDistanceMeters
         }
+        let start = geometry.coordinates[match.segmentIndex]
+        let end = geometry.coordinates[match.segmentIndex + 1]
         // Scale provider totals by geometry progress so preview and navigation totals agree.
         return RouteProgress(
             distanceFromRouteMeters: match.distanceFromRouteMeters,
@@ -18,7 +22,8 @@ struct RouteProgressCalculator {
             distanceToNextManeuverMeters: nextManeuver.map {
                 max(0, $0.distanceFromRouteStartMeters - match.traveledDistanceMeters)
             },
-            remainingDurationSeconds: route.estimatedDurationSeconds * (1 - fraction)
+            remainingDurationSeconds: route.estimatedDurationSeconds * (1 - fraction),
+            routeHeadingDegrees: RouteGeometry.bearing(from: start, to: end)
         )
     }
 }

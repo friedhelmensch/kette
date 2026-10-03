@@ -22,11 +22,25 @@ enum PreviewFixture {
 private final class FixtureLocationService: LocationProviding {
     let authorization = CLAuthorizationStatus.authorizedWhenInUse
     let horizontalAccuracy: Double? = 5
-    let coordinate: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 52.52, longitude: 13.405)
+    var course: Double? {
+        ProcessInfo.processInfo.arguments.contains("-ui-testing-travel-course") ? 120 : nil
+    }
+    var coordinate: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 52.52, longitude: 13.405)
+    private var movementTask: Task<Void, Never>?
     var onChange: (() -> Void)?
     func requestPermission() {}
     func startUpdates() {}
-    func setNavigationActive(_ active: Bool) {}
+    func setNavigationActive(_ active: Bool) {
+        movementTask?.cancel()
+        guard active, ProcessInfo.processInfo.arguments.contains("-ui-testing-moving-location") else { return }
+        movementTask = Task {
+            for step in 1...15 {
+                do { try await Task.sleep(for: .seconds(1)) } catch { return }
+                coordinate = CLLocationCoordinate2D(latitude: 52.52 + Double(step) * 0.00015, longitude: 13.405 + Double(step) * 0.00015)
+                onChange?()
+            }
+        }
+    }
 }
 
 @MainActor

@@ -85,9 +85,11 @@ final class FakeRoutingService: RoutingService {
     var destinations: [CLLocationCoordinate2D] = []
     var result: BicycleRoute?
     var error: RoutingError?
+    var beforeResponse: (() async -> Void)?
     func calculateRoute(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) async throws -> BicycleRoute {
         starts.append(start)
         destinations.append(destination)
+        await beforeResponse?()
         if let error { throw error }
         if let result { return result }
         return BicycleRoute(coordinates: [start, destination], distanceMeters: 3_000, estimatedDurationSeconds: 720)

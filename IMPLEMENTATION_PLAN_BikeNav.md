@@ -31,8 +31,9 @@ Primary target:
 - Native iOS
 - Swift
 - SwiftUI
-- iOS 27+
+- iOS 26+
 - Support portrait and both landscape orientations. Landscape is the user's preferred navigation orientation.
+- In landscape navigation, place the next maneuver and remaining time/distance in a left-hand column, leaving the map clear on the right. In portrait, keep them at the top and bottom.
 
 Use Apple frameworks wherever possible.
 
@@ -499,8 +500,11 @@ During navigation:
 
 - center the map near the cyclist
 - orient the map approximately in movement/heading direction
+- use an explicit MapKit camera with a 45° tilt, centered near the cyclist and oriented using GPS course while moving (at least 1 m/s), with the current route segment as fallback; update with GPS progress and course in portrait and landscape
+- If GPS course is unavailable, derive travel direction from consecutive fixes at least 5 m apart, each with horizontal accuracy no worse than 50 m. The follow arrow restores this latest travel direction and tilt.
 - use a slightly tilted or forward-looking camera if MapKit allows a clean implementation
 - avoid constantly jumping or overreacting to noisy heading values
+- After the user moves the map manually, keep the camera where they left it until the arrow button is pressed. Resume the navigation camera on that button; progress and rerouting continue while camera following is paused.
 
 Do not make navigation camera logic tightly coupled to route matching.
 
@@ -573,6 +577,10 @@ distance > 50 m for a short sustained period
 Ignore location updates with very poor horizontal accuracy.
 
 The exact thresholds should be constants that can be tuned during real bicycle testing.
+
+Current implementation uses three consecutive valid fixes more than 30 m away
+and a 20-second cooldown. A fix on the route resets the counter; fixes with
+horizontal accuracy worse than 50 m are ignored.
 
 ---
 
@@ -893,6 +901,9 @@ Acceptance criteria:
 
 ## Milestone 7 – Off-route and rerouting
 
+Implemented ahead of voice navigation at the user's request after the simulated
+ride revealed that deviations did not trigger rerouting.
+
 Implement:
 
 - off-route detector
@@ -1201,7 +1212,7 @@ Suggested prompt:
 ```text
 Implement Milestones 1 and 2 from IMPLEMENTATION_PLAN.md.
 
-Build a native iOS 27+ SwiftUI application.
+Build a native iOS 26+ SwiftUI application.
 
 Requirements:
 - Use MapKit.

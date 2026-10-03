@@ -6,6 +6,17 @@ struct RouteGeometry {
     let cumulativeDistances: [Double]
     var totalDistance: Double { cumulativeDistances.last ?? 0 }
 
+    static func bearing(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) -> Double {
+        let latitude = start.latitude * .pi / 180
+        let endLatitude = end.latitude * .pi / 180
+        let longitudeDifference = (end.longitude - start.longitude) * .pi / 180
+        let angle = atan2(
+            sin(longitudeDifference) * cos(endLatitude),
+            cos(latitude) * sin(endLatitude) - sin(latitude) * cos(endLatitude) * cos(longitudeDifference)
+        ) * 180 / .pi
+        return (angle + 360).truncatingRemainder(dividingBy: 360)
+    }
+
     init(coordinates: [CLLocationCoordinate2D]) {
         self.coordinates = coordinates
         var cumulative: [Double] = coordinates.isEmpty ? [] : [0]
