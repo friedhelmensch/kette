@@ -1,4 +1,4 @@
-# BikeNav – Implementation Plan for Codex
+# KETTE – Implementation Plan for Codex
 
 ## 1. Product Goal
 
@@ -31,7 +31,8 @@ Primary target:
 - Native iOS
 - Swift
 - SwiftUI
-- iOS 18+
+- iOS 27+
+- Support portrait and both landscape orientations. Landscape is the user's preferred navigation orientation.
 
 Use Apple frameworks wherever possible.
 
@@ -139,10 +140,10 @@ They should live in pure Swift classes/structs and be unit-testable.
 # 5. Suggested Project Structure
 
 ```text
-BikeNav/
+KETTE/
 │
 ├── App/
-│   └── BikeNavApp.swift
+│   └── KETTEApp.swift
 │
 ├── Models/
 │   ├── Coordinate.swift
@@ -1176,12 +1177,12 @@ These may be future projects but are outside the MVP.
 
 When making changes:
 
-1. Keep code modular.
+1. Keep code simple and modular. Use straightforward implementations; avoid speculative features, convoluted abstractions, and exhaustive handling of hypothetical edge cases.
 2. Prefer native Apple frameworks.
 3. Use Swift concurrency.
 4. Avoid third-party packages unless they solve a significant problem.
 5. Do not add functionality outside the current milestone.
-6. Add unit tests for geometry/navigation logic.
+6. Always write tests first: observe a meaningful failing test before implementing behavior, then make it pass. Include unit tests for geometry/navigation logic.
 7. Do not redesign unrelated parts of the codebase.
 8. Run builds/tests after meaningful changes.
 9. Fix compiler warnings introduced by new code.
@@ -1200,7 +1201,7 @@ Suggested prompt:
 ```text
 Implement Milestones 1 and 2 from IMPLEMENTATION_PLAN.md.
 
-Build a native iOS 18+ SwiftUI application.
+Build a native iOS 27+ SwiftUI application.
 
 Requirements:
 - Use MapKit.

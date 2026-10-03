@@ -1,5 +1,10 @@
 # Development workflow
 
+Keep it simple. Stick to the implementation plan and the current milestone.
+Prefer straightforward code and the smallest useful design. Do not add speculative
+features, convoluted abstractions, or exhaustive handling of hypothetical edge
+cases. Test the required behavior and realistic failures; do not over-engineer.
+
 Always write tests first when doing development.
 
 For each behavior change, write a meaningful test, run it and observe the expected

@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+._*
+
+# Xcode build output
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcresult
+
+# Per-user Xcode settings (keep shared schemes and project files)
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager local build and workspace state
+.build/
+.swiftpm/
+# Keep Package.resolved tracked for reproducible app dependencies.
+
+# Local secrets and signing assets
+.env
+.env.*
+!.env.example
+*.p12
+*.mobileprovision
