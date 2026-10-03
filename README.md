@@ -93,4 +93,6 @@ public server.
   waiting for the new route. With networking disabled, the old route is retained.
 - Cancel a search and retry. Check search failures with networking disabled.
 
+The screen stays awake while navigation is active. Ending navigation restores normal auto-lock.
+
 No background location permission or location history is used in this increment.

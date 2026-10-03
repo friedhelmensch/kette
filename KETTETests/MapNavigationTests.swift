@@ -1,10 +1,25 @@
 import XCTest
+import UIKit
 import CoreLocation
 import MapKit
 @testable import KETTE
 
 @MainActor
 final class MapNavigationTests: XCTestCase {
+    func testNavigationKeepsScreenAwakeUntilStopped() async {
+        let original = UIApplication.shared.isIdleTimerDisabled
+        defer { UIApplication.shared.isIdleTimerDisabled = original }
+        UIApplication.shared.isIdleTimerDisabled = false
+        let (model, _, _) = await makeModel()
+        XCTAssertFalse(UIApplication.shared.isIdleTimerDisabled)
+        model.startNavigation()
+        XCTAssertTrue(UIApplication.shared.isIdleTimerDisabled)
+        model.pauseFollowingPosition()
+        XCTAssertTrue(UIApplication.shared.isIdleTimerDisabled)
+        model.stopNavigation()
+        XCTAssertFalse(UIApplication.shared.isIdleTimerDisabled)
+    }
+
     func testResumingUsesLatestGPSDirectionOfTravelAndFallsBackWhenUnavailable() async throws {
         let (model, location, _) = await makeModel()
         location.course = 135

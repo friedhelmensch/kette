@@ -1,4 +1,5 @@
 import CoreLocation
+import UIKit
 import Observation
 
 @MainActor
@@ -36,6 +37,7 @@ final class MapViewModel {
         lastRerouteTime = nil
         cancelSearch()
         isNavigating = true
+        UIApplication.shared.isIdleTimerDisabled = true
         isFollowingPosition = true
         location.setNavigationActive(true)
         updateNavigationProgress()
@@ -50,6 +52,7 @@ final class MapViewModel {
             isRerouting = false
         }
         isNavigating = false
+        UIApplication.shared.isIdleTimerDisabled = false
         isFollowingPosition = false
         routeError = nil
         navigationEngine = nil
