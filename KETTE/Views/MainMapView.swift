@@ -3,7 +3,7 @@ import MapKit
 
 struct MainMapView: View {
     static func navigationCamera(at coordinate: CLLocationCoordinate2D, heading: Double) -> MapCameraPosition {
-        .camera(MapCamera(centerCoordinate: coordinate, distance: 300, heading: heading, pitch: 45))
+        .camera(MapCamera(centerCoordinate: coordinate, distance: 240, heading: heading, pitch: 45))
     }
 
     @Bindable var model: MapViewModel
@@ -24,7 +24,15 @@ struct MainMapView: View {
         GeometryReader { geometry in
             let landscapeNavigation = model.isNavigating && geometry.size.width > geometry.size.height
             Map(position: $camera, scope: mapScope) {
-                UserAnnotation()
+                if !model.isNavigating {
+                    UserAnnotation()
+                } else if !model.isFollowingPosition, let coordinate = model.currentCoordinate {
+                    Annotation("Your location", coordinate: coordinate, anchor: .center) {
+                        cyclistMarker
+                            .accessibilityIdentifier("geographicCyclist")
+                    }
+                    .annotationTitles(.hidden)
+                }
                 if let route = model.route {
                     MapPolyline(coordinates: route.coordinates)
                         .stroke(.blue, lineWidth: 6)
@@ -44,6 +52,24 @@ struct MainMapView: View {
                 #endif
             }
             .mapControls { }
+            .overlay {
+                if model.isNavigating && model.isFollowingPosition {
+                    GeometryReader { mapGeometry in
+                        cyclistMarker
+                            .accessibilityIdentifier("fixedCyclist")
+                            .position(
+                                x: mapGeometry.size.width / 2,
+                                y: mapGeometry.size.height / 2
+                            )
+                    }
+                    .allowsHitTesting(false)
+                }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if model.isNavigating && model.isFollowingPosition {
+                    Color.clear.frame(height: geometry.size.height / 3 + geometry.safeAreaInsets.bottom)
+                }
+            }
             .overlay(alignment: .topTrailing) {
                 VStack(spacing: 8) {
                     Button {
@@ -137,6 +163,16 @@ struct MainMapView: View {
                 .padding(.horizontal)
                 .padding(.top, 8)
         }
+    }
+
+    private var cyclistMarker: some View {
+        Circle()
+            .fill(.blue)
+            .frame(width: 18, height: 18)
+            .overlay(Circle().stroke(.white, lineWidth: 3))
+            .shadow(radius: 2)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Your location")
     }
 
     @ViewBuilder

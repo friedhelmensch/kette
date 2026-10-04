@@ -196,7 +196,7 @@ final class MapNavigationTests: XCTestCase {
         XCTAssertEqual(camera.centerCoordinate.longitude, coordinate.longitude, accuracy: 0.000001)
         XCTAssertEqual(camera.heading, 90, accuracy: 0.1)
         XCTAssertEqual(camera.pitch, 45, accuracy: 0.1)
-        XCTAssertEqual(camera.distance, 300, accuracy: 1)
+        XCTAssertEqual(camera.distance, 240, accuracy: 1)
     }
 
     func testGPSUpdatesReduceRemainingDistanceAndAdvanceManeuver() async throws {

@@ -8,7 +8,10 @@ from successive accurate fixes at least 5 meters apart. Without a travel directi
 the camera uses the current route segment's direction.
 Landscape navigation places the maneuver and remaining time/distance panels on
 the left to give the map more room; portrait uses the top and bottom.
-Moving the map manually pauses camera following. The arrow button resumes the
+While following navigation, the cyclist marker stays fixed one-third of the screen
+height above the bottom, with a 240 m camera distance. The map moves underneath it.
+Moving the map manually shows the cyclist at their geographic
+position and pauses camera following. The arrow button resumes the
 navigation view; GPS progress and rerouting continue while browsing the map.
 No third-party dependencies.
 

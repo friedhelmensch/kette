@@ -2,6 +2,34 @@ import XCTest
 
 final class KETTEUITests: XCTestCase {
     @MainActor
+    func testCyclistStaysFixedWhileFollowingAndMovesToMapWhenBrowsing() {
+        let app = XCUIApplication()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        defer { XCUIDevice.shared.orientation = .portrait }
+        app.launchArguments = ["-ui-testing-route-preview", "-ui-testing-moving-location"]
+        app.launch()
+        XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 10))
+        app.buttons["startNavigation"].tap()
+        let cyclist = app.otherElements["fixedCyclist"]
+        XCTAssertTrue(cyclist.waitForExistence(timeout: 3))
+        let initialFrame = cyclist.frame
+        let map = app.otherElements["mainMap"]
+        XCTAssertEqual(initialFrame.midY, app.frame.minY + app.frame.height * 2 / 3, accuracy: 4)
+        waitForDistanceChange(app.staticTexts["remainingDistance"])
+        XCTAssertEqual(cyclist.frame.midX, initialFrame.midX, accuracy: 1)
+        XCTAssertEqual(cyclist.frame.midY, initialFrame.midY, accuracy: 1)
+        map.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: map.coordinate(withNormalizedOffset: CGVector(dx: 0.55, dy: 0.5)))
+        XCTAssertFalse(cyclist.exists)
+        XCTAssertTrue(app.otherElements["geographicCyclist"].exists)
+        app.buttons["resumeFollowing"].tap()
+        XCTAssertTrue(cyclist.waitForExistence(timeout: 3))
+        XCTAssertFalse(app.otherElements["geographicCyclist"].exists)
+        app.buttons["stopNavigation"].tap()
+        XCTAssertFalse(cyclist.exists)
+    }
+
+    @MainActor
     func testFollowArrowRestoresRenderedTravelHeadingAndTiltAfterMapRotation() throws {
         let app = XCUIApplication()
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -81,6 +109,7 @@ final class KETTEUITests: XCTestCase {
             XCUIDevice.shared.orientation = orientation
             XCTAssertTrue(app.buttons["stopNavigation"].waitForExistence(timeout: 3))
             XCTAssertGreaterThan(app.frame.width, app.frame.height)
+            XCTAssertEqual(app.otherElements["fixedCyclist"].frame.midY, app.frame.minY + app.frame.height * 2 / 3, accuracy: 4)
             XCTAssertTrue(app.staticTexts["nextManeuver"].isHittable)
             XCTAssertTrue(app.staticTexts["remainingDistance"].isHittable)
             XCTAssertTrue(app.buttons["stopNavigation"].isHittable)
@@ -96,6 +125,7 @@ final class KETTEUITests: XCTestCase {
         XCTAssertTrue(app.buttons["stopNavigation"].waitForExistence(timeout: 3))
         XCTAssertLessThan(app.staticTexts["nextManeuver"].frame.maxY, app.frame.midY)
         XCTAssertGreaterThan(app.staticTexts["remainingDuration"].frame.minY, app.frame.midY)
+        XCTAssertEqual(app.otherElements["fixedCyclist"].frame.midY, app.frame.minY + app.frame.height * 2 / 3, accuracy: 4)
         app.buttons["stopNavigation"].tap()
         XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 3))
         XCTAssertTrue(app.buttons["startNavigation"].isHittable)
