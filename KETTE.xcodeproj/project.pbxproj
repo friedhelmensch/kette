@@ -426,6 +426,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = H6883AE33D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE needs your location to show your position on the map.";
@@ -477,6 +478,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = H6883AE33D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = KETTE;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "KETTE needs your location to show your position on the map.";
