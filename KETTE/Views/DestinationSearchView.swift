@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DestinationSearchView: View {
     @Bindable var model: MapViewModel
+    var isFullScreen = false
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -10,11 +11,11 @@ struct DestinationSearchView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
                 TextField("Where to?", text: $model.query)
-                    .accessibilityIdentifier("destinationSearch")
+                    .accessibilityIdentifier(isFullScreen ? "activeDestinationSearch" : "destinationSearch")
                     .focused($focused)
                     .autocorrectionDisabled()
                     .submitLabel(.search)
-                if model.isSearching {
+                if isFullScreen {
                     Button("Cancel") {
                         focused = false
                         model.cancelSearch()
@@ -24,7 +25,7 @@ struct DestinationSearchView: View {
             }
             .padding()
 
-            if model.isSearching {
+            if isFullScreen {
                 if model.isResolving {
                     ProgressView("Loading destination …")
                         .padding()
@@ -66,17 +67,26 @@ struct DestinationSearchView: View {
                             }
                         }
                     }
-                    .frame(maxHeight: 300)
                     .scrollDismissesKeyboard(.interactively)
                 }
             }
         }
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .frame(maxHeight: isFullScreen ? .infinity : nil, alignment: .top)
+        .background {
+            if isFullScreen {
+                Color(uiColor: .systemBackground).ignoresSafeArea()
+            } else {
+                RoundedRectangle(cornerRadius: 20).fill(.regularMaterial)
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(isFullScreen ? "destinationSearchScreen" : "destinationSearchBar")
+        .onAppear { if isFullScreen { focused = true } }
         .onChange(of: focused) { _, focused in
             if focused { model.isSearching = true }
         }
         .onChange(of: model.isSearching) { _, searching in
-            if !searching { focused = false }
+            if !searching || !isFullScreen { focused = false }
         }
     }
 }

@@ -11,6 +11,7 @@ enum PreviewFixture {
             routing: FixtureRoutingService()
         )
         model.start()
+        if ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") || ProcessInfo.processInfo.arguments.contains("-ui-testing-search") { return model }
         Task {
             await model.select(SearchSuggestion(id: "preview", title: "Potsdamer Platz", subtitle: "Berlin"))
         }
@@ -29,7 +30,15 @@ private final class FixtureLocationService: LocationProviding {
     private var movementTask: Task<Void, Never>?
     var onChange: (() -> Void)?
     func requestPermission() {}
-    func startUpdates() {}
+    func startUpdates() {
+        guard ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") else { return }
+        coordinate = nil
+        movementTask = Task {
+            try? await Task.sleep(for: .seconds(2))
+            coordinate = CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522)
+            onChange?()
+        }
+    }
     func setNavigationActive(_ active: Bool) {
         movementTask?.cancel()
         guard active, ProcessInfo.processInfo.arguments.contains("-ui-testing-moving-location") else { return }
@@ -45,10 +54,14 @@ private final class FixtureLocationService: LocationProviding {
 
 @MainActor
 private final class FixtureSearchService: DestinationSearching {
-    let suggestions: [SearchSuggestion] = []
+    private(set) var suggestions: [SearchSuggestion] = []
     let errorMessage: String? = nil
     var onChange: (() -> Void)?
-    func updateQuery(_ query: String) {}
+    func updateQuery(_ query: String) {
+        guard ProcessInfo.processInfo.arguments.contains("-ui-testing-search") else { return }
+        suggestions = query.isEmpty ? [] : [SearchSuggestion(id: "preview", title: "Potsdamer Platz", subtitle: "Berlin")]
+        onChange?()
+    }
     func cancel() {}
     func resolve(_ suggestion: SearchSuggestion) async throws -> Destination {
         Destination(name: suggestion.title, subtitle: suggestion.subtitle, latitude: 52.509, longitude: 13.376)

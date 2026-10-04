@@ -2,6 +2,61 @@ import XCTest
 
 final class KETTEUITests: XCTestCase {
     @MainActor
+    func testSearchCoversMapAndReturnsToMapAfterCancelOrSelection() {
+        let app = XCUIApplication()
+        XCUIDevice.shared.orientation = .portrait
+        defer { XCUIDevice.shared.orientation = .portrait }
+        app.launchArguments = ["-ui-testing-search"]
+        app.launch()
+        let search = app.textFields["destinationSearch"]
+        XCTAssertTrue(search.waitForExistence(timeout: 10))
+        search.tap()
+        XCTAssertTrue(app.otherElements["destinationSearchScreen"].waitForExistence(timeout: 3))
+        let activeSearch = app.textFields["activeDestinationSearch"]
+        activeSearch.typeText("Potsdamer")
+        XCTAssertTrue(app.buttons["Potsdamer Platz, Berlin"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.otherElements["mainMap"].isHittable)
+        XCTAssertEqual(app.otherElements["destinationSearchScreen"].frame.width, app.frame.width, accuracy: 1)
+        let portrait = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        portrait.name = "Full-screen-search-portrait"
+        portrait.lifetime = .keepAlways
+        add(portrait)
+        app.buttons["cancelSearch"].tap()
+        XCTAssertTrue(app.otherElements["mainMap"].isHittable)
+        XCTAssertEqual(search.value as? String, "Where to?")
+        XCUIDevice.shared.orientation = .landscapeLeft
+        search.tap()
+        activeSearch.typeText("Potsdamer")
+        XCTAssertFalse(app.otherElements["mainMap"].isHittable)
+        XCTAssertEqual(app.otherElements["destinationSearchScreen"].frame.width, app.frame.width, accuracy: 1)
+        let landscape = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        landscape.name = "Full-screen-search-landscape"
+        landscape.lifetime = .keepAlways
+        add(landscape)
+        app.buttons["Potsdamer Platz, Berlin"].tap()
+        XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.otherElements["destinationSearchScreen"].exists)
+        XCTAssertTrue(app.otherElements["mainMap"].isHittable)
+    }
+
+    @MainActor
+    func testLaunchCentersMapWhenFirstLocationArrives() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing-launch-location"]
+        app.launch()
+        let map = app.otherElements["mainMap"]
+        XCTAssertEqual(app.buttons["resumeFollowing"].value as? String, "Active")
+        let centered = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            guard let value = map.value as? String,
+                  let latitude = Double(value.split(separator: "|").first.map(String.init) ?? "") else { return false }
+            return abs(latitude - 48.8566) < 0.001
+        }, object: map)
+        XCTAssertEqual(XCTWaiter.wait(for: [centered], timeout: 10), .completed)
+        let components = try XCTUnwrap(map.value as? String).split(separator: "|")
+        XCTAssertEqual(try XCTUnwrap(Double(components[1])), 2.3522, accuracy: 0.001)
+    }
+
+    @MainActor
     func testCyclistStaysFixedWhileFollowingAndMovesToMapWhenBrowsing() {
         let app = XCUIApplication()
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -160,7 +215,7 @@ final class KETTEUITests: XCTestCase {
         let search = app.textFields["destinationSearch"]
         XCTAssertTrue(search.exists)
         search.tap()
-        search.typeText("Berlin")
+        app.textFields["activeDestinationSearch"].typeText("Berlin")
         XCTAssertTrue(app.buttons["cancelSearch"].exists)
         app.buttons["cancelSearch"].tap()
         XCTAssertEqual(search.value as? String, "Where to?")

@@ -6,7 +6,7 @@ struct KETTEApp: App {
 
     init() {
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-ui-testing-route-preview") {
+        if ProcessInfo.processInfo.arguments.contains("-ui-testing-route-preview") || ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") || ProcessInfo.processInfo.arguments.contains("-ui-testing-search") {
             _model = State(initialValue: PreviewFixture.makeModel())
             return
         }

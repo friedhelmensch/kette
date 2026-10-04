@@ -11,14 +11,11 @@ struct MainMapView: View {
     @Environment(\.openURL) private var openURL
     @Namespace private var mapScope
     @State private var renderedCameraAngles = ""
-    @State private var camera: MapCameraPosition = .userLocation(
-        followsHeading: false,
-        fallback: .region(MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 52.52, longitude: 13.405),
-            latitudinalMeters: 5_000,
-            longitudinalMeters: 5_000
-        ))
-    )
+    @State private var camera: MapCameraPosition = .region(MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 52.52, longitude: 13.405),
+        latitudinalMeters: 5_000,
+        longitudinalMeters: 5_000
+    ))
 
     var body: some View {
         GeometryReader { geometry in
@@ -48,6 +45,9 @@ struct MainMapView: View {
                 #if DEBUG
                 if ProcessInfo.processInfo.arguments.contains("-ui-testing-camera") {
                     renderedCameraAngles = "\(context.camera.heading)|\(context.camera.pitch)"
+                }
+                if ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") {
+                    renderedCameraAngles = "\(context.camera.centerCoordinate.latitude)|\(context.camera.centerCoordinate.longitude)"
                 }
                 #endif
             }
@@ -110,6 +110,18 @@ struct MainMapView: View {
                 if !landscapeNavigation { bottomPanel }
             }
             .task { model.start() }
+            .fullScreenCover(isPresented: $model.isSearching) {
+                DestinationSearchView(model: model, isFullScreen: true)
+            }
+            .onChange(of: [model.currentCoordinate?.latitude, model.currentCoordinate?.longitude], initial: true) { _, _ in
+                guard model.isFollowingPosition, !model.isNavigating, model.destination == nil,
+                      let coordinate = model.currentCoordinate else { return }
+                camera = .region(MKCoordinateRegion(
+                    center: coordinate,
+                    latitudinalMeters: 1_000,
+                    longitudinalMeters: 1_000
+                ))
+            }
             .onChange(of: camera.positionedByUser) { _, positionedByUser in
                 if positionedByUser { model.pauseFollowingPosition() }
             }

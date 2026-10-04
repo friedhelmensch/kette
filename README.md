@@ -2,6 +2,8 @@
 
 Minimal native bicycle navigation for iPhone, built with SwiftUI and Apple frameworks.
 Targets iOS 26+ and Swift 6. Supports portrait and both landscape orientations.
+On launch, the map centres on the current location as soon as a GPS fix arrives.
+Destination search opens a full-screen view; cancel or select a result to return to the map.
 During navigation, the map follows the cyclist with a 45° tilt and points in the
 GPS direction of travel. If GPS supplies only positions, direction is calculated
 from successive accurate fixes at least 5 meters apart. Without a travel direction,
