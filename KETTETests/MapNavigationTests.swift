@@ -6,6 +6,18 @@ import MapKit
 
 @MainActor
 final class MapNavigationTests: XCTestCase {
+    func testProgressFollowsReturnLegOfOverlappingRoute() throws {
+        let start = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        let turn = CLLocationCoordinate2D(latitude: 0, longitude: 0.001)
+        let route = BicycleRoute(coordinates: [start, turn, start], distanceMeters: 222.4, estimatedDurationSeconds: 120)
+        var engine = NavigationEngine(route: route)
+        _ = engine.progress(at: start, horizontalAccuracy: 5)
+        _ = engine.progress(at: turn, horizontalAccuracy: 5)
+        let progress = try XCTUnwrap(engine.progress(at: CLLocationCoordinate2D(latitude: 0, longitude: 0.0005), horizontalAccuracy: 5))
+        XCTAssertEqual(progress.fractionCompleted, 0.75, accuracy: 0.001)
+        XCTAssertEqual(progress.routeHeadingDegrees, 270, accuracy: 0.1)
+    }
+
     func testNavigationKeepsScreenAwakeUntilStopped() async {
         let original = UIApplication.shared.isIdleTimerDisabled
         defer { UIApplication.shared.isIdleTimerDisabled = original }
@@ -90,7 +102,7 @@ final class MapNavigationTests: XCTestCase {
         model.startNavigation()
         routing.result = BicycleRoute(coordinates: [offRouteCoordinate, destinationCoordinate], distanceMeters: 350, estimatedDurationSeconds: 180)
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 2)
         XCTAssertEqual(routing.starts.last?.longitude, offRouteCoordinate.longitude)
         XCTAssertEqual(routing.destinations.last?.latitude, destinationCoordinate.latitude)
@@ -106,13 +118,13 @@ final class MapNavigationTests: XCTestCase {
         sendOffRouteUpdates(1, location: location)
         location.horizontalAccuracy = 200
         sendOffRouteUpdates(4, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 1)
         location.horizontalAccuracy = 5
         location.coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0.0005)
         location.onChange?()
         sendOffRouteUpdates(2, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 1)
     }
 
@@ -123,15 +135,20 @@ final class MapNavigationTests: XCTestCase {
         routing.beforeResponse = { await withCheckedContinuation { resume = $0 } }
         model.startNavigation()
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
-        XCTAssertEqual(routing.starts.count, 2)
+        await routing.waitForCalls(2)
         XCTAssertTrue(model.isRouting)
+        var completion: Task<Void, Never>?
+        await withCheckedContinuation { entered in
+            completion = Task {
+                entered.resume()
+                await model.calculateRoute()
+            }
+        }
         sendOffRouteUpdates(5, location: location)
-        await settleTasks()
         XCTAssertEqual(routing.starts.count, 2)
         model.stopNavigation()
         resume?.resume()
-        await settleTasks()
+        await completion?.value
         XCTAssertFalse(model.isRouting)
         XCTAssertFalse(model.isNavigating)
         XCTAssertEqual(model.route?.id, originalID)
@@ -145,19 +162,19 @@ final class MapNavigationTests: XCTestCase {
         model.startNavigation()
         routing.error = .httpStatus(503)
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 2)
         XCTAssertEqual(model.route?.id, originalID)
         XCTAssertTrue(model.isNavigating)
         XCTAssertNotNil(model.routeError)
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 2)
         time = time.addingTimeInterval(21)
         routing.error = nil
         routing.result = BicycleRoute(coordinates: [offRouteCoordinate, destinationCoordinate], distanceMeters: 350, estimatedDurationSeconds: 180)
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertEqual(routing.starts.count, 3)
         XCTAssertNotEqual(model.route?.id, originalID)
         XCTAssertNil(model.routeError)
@@ -169,7 +186,7 @@ final class MapNavigationTests: XCTestCase {
         model.startNavigation()
         routing.error = .httpStatus(503)
         sendOffRouteUpdates(3, location: location)
-        await settleTasks()
+        if model.isRouting { await model.calculateRoute() }
         XCTAssertNotNil(model.routeError)
         model.stopNavigation()
         XCTAssertFalse(model.isNavigating)
@@ -183,10 +200,6 @@ final class MapNavigationTests: XCTestCase {
     private func sendOffRouteUpdates(_ count: Int, location: FakeLocationService) {
         location.coordinate = offRouteCoordinate
         for _ in 0..<count { location.onChange?() }
-    }
-
-    private func settleTasks() async {
-        for _ in 0..<30 { await Task.yield() }
     }
 
     func testNavigationCameraIsTiltedAndPointsAlongRoute() throws {
@@ -219,6 +232,8 @@ final class MapNavigationTests: XCTestCase {
         location.coordinate = CLLocationCoordinate2D(latitude: 0.001, longitude: 0.001)
         location.onChange?()
         XCTAssertEqual(model.navigationProgress?.remainingDistanceMeters, initial.remainingDistanceMeters)
+        XCTAssertEqual(model.navigationCoordinate?.latitude, 0)
+        XCTAssertEqual(model.navigationCoordinate?.longitude, 0)
     }
 
     func testStoppingClearsProgressAndFurtherGPSUpdatesDoNotNavigate() async {

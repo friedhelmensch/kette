@@ -22,7 +22,7 @@ No third-party dependencies.
 Open `KETTE.xcodeproj` in Xcode, select the shared **KETTE** scheme and an iPhone
 simulator running iOS 26 or newer, then Run. For a physical iPhone, select your own signing
 team and set a unique bundle identifier in the app target's Signing & Capabilities.
-The current `de.kette.KETTE` identifier is a development placeholder.
+The app target currently uses `io.kette`. For a separate development copy, use your own identifier.
 
 ## Development
 
@@ -44,19 +44,22 @@ The implementation plan is in [IMPLEMENTATION_PLAN_KETTE.md](IMPLEMENTATION_PLAN
 Milestones 1–5 cover map/location, destination search, bicycle routing, route
 preview, and basic foreground navigation. Start follows the cyclist and shows the
 next maneuver, distance to it, remaining distance, and estimated remaining time.
-End returns to the preview. Automatic rerouting is included. Voice, background
-navigation, and arrival handling follow in later increments.
+End returns to the preview. Automatic rerouting is included. The first release is
+foreground navigation with manual End; voice, background navigation, and automatic
+arrival handling remain deferred.
 
 Navigation projects GPS coordinates onto route segments and caches cumulative
 geometry distances once per route. It scales remaining distance and time by the
-fraction of route geometry completed. GPS fixes with horizontal accuracy worse
-than 50 meters leave the previous progress intact. BRouter turn hints supply
+fraction of route geometry completed. When segments overlap, matching uses previous progress to choose the nearby leg.
+GPS fixes with horizontal accuracy worse than 50 meters leave navigation progress
+and the camera position unchanged. BRouter turn hints supply
 maneuvers and roundabout exits; street names are not included in these hints.
 
 Three consecutive valid GPS fixes more than 30 meters from the route trigger a
 new route from the current location to the same destination. Requests have a
-20-second cooldown. Navigation keeps running while the route is recalculated;
-a failed request preserves the previous route and can be retried.
+20-second cooldown. Navigation and its time/distance summary remain visible while recalculating;
+a failed request preserves the previous route and can be retried. Cancellation
+clears the current request state; a late response cannot replace a newer route.
 
 Routing uses the public endpoint `https://brouter.de/brouter` with the
 `trekking` profile. Selecting a destination sends the starting and destination
@@ -67,7 +70,9 @@ coordinates and request metadata, including IP addresses, are logged for two
 weeks, plus ten additional days in hosting-provider backups.
 
 The first public release is planned to use this service directly, without a KETTE
-backend. Confirm acceptable app usage and request volume with the maintainers
+backend. The privacy-policy draft is [PRIVACY.md](PRIVACY.md); publish it at a
+public URL before release. BRouter/OpenStreetMap credits appear in search.
+Confirm acceptable app usage and request volume with the maintainers
 before release; no explicit quota or availability guarantee was found in the
 official pages reviewed on 2026-10-03. The endpoint can be changed through
 `BRouterService`'s initializer. Tests inject responses rather than calling the
@@ -93,7 +98,7 @@ public server.
 - During navigation, verify the map is tilted and the route ahead points up in
   portrait and landscape. The camera direction updates after a turn.
 - Follow a different simulated ride from the calculated route. After three valid
-  off-route fixes, verify “Route wird neu berechnet …” appears, then the route and
+  off-route fixes, verify “Recalculating route …” appears, then the route and
   instructions change while navigation stays active. End also works while
   waiting for the new route. With networking disabled, the old route is retained.
 - Cancel a search and retry. Check search failures with networking disabled.

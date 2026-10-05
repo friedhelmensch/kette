@@ -8,7 +8,6 @@ enum ManeuverType: Sendable {
 struct RouteManeuver: Sendable {
     let coordinate: CLLocationCoordinate2D
     let type: ManeuverType
-    var streetName: String? = nil
     let distanceFromRouteStartMeters: Double
     var roundaboutExit: Int? = nil
 }

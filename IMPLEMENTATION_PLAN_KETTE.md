@@ -21,6 +21,16 @@ The complete user flow is:
 
 No accounts, social features, purchases, tour collections, fitness tracking, achievements, or complex settings.
 
+Current first-release scope: milestones 1–5 plus rerouting from milestone 7.
+Navigation runs in the foreground and ends manually with **End**. Voice,
+background navigation, and automatic arrival handling below describe later work;
+they are not acceptance criteria for this release. The full product flow above
+includes those later increments.
+
+Release work still pending: confirm acceptable public-server app usage and volume
+with BRouter's maintainers, publish the privacy policy at a public URL, and finish
+App Store metadata/submission. Code changes do not establish that these are done.
+
 ---
 
 ## 2. Target Platform
@@ -190,7 +200,11 @@ struct Destination: Identifiable, Equatable {
     let id: UUID
     let name: String
     let subtitle: String?
-    let coordinate: CLLocationCoordinate2D
+    let latitude: Double
+    let longitude: Double
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 }
 ```
 
@@ -218,6 +232,9 @@ enum ManeuverType {
     case slightRight
     case sharpLeft
     case sharpRight
+    case keepLeft
+    case keepRight
+    case uTurn
     case roundabout
     case destination
 }
@@ -227,7 +244,6 @@ enum ManeuverType {
 struct RouteManeuver {
     let coordinate: CLLocationCoordinate2D
     let type: ManeuverType
-    let streetName: String?
     let distanceFromRouteStartMeters: Double
 }
 ```
@@ -320,7 +336,7 @@ Create:
 
 ```swift
 @MainActor
-final class LocationService: NSObject, ObservableObject
+final class LocationService: NSObject
 ```
 
 Responsibilities:
@@ -328,10 +344,13 @@ Responsibilities:
 - request location permission
 - receive location updates
 - expose current location
-- expose heading
-- expose speed
+- expose GPS course, deriving it from accurate position changes when needed
+- use speed to qualify GPS course
 - expose horizontal accuracy
-- support navigation in background when navigation is active
+- switch accuracy and distance-filter settings for active navigation
+- notify the observable view model through `LocationProviding.onChange`
+
+Background navigation remains deferred to its later milestone.
 
 Use:
 
@@ -368,6 +387,9 @@ When a suggestion is selected:
 5. Calculate a bicycle route.
 
 The user should not need to manually enter a complete address.
+The compact map search control is a button opening an opaque full-screen search
+view. Only that view has an editable field and suggestions. Cancel or destination
+selection returns to the map; suggestions do not change the map layout.
 
 ---
 
@@ -383,7 +405,7 @@ Conceptual UI:
 
 ```text
 ┌──────────────────────────────┐
-│ 🔎 Wohin?                    │
+│ 🔎 Where to?                    │
 ├──────────────────────────────┤
 │                              │
 │                              │
@@ -470,7 +492,7 @@ Conceptual interface:
 ```text
 ┌──────────────────────────────┐
 │ ↰ In 180 m                   │
-│   links auf Talstraße        │
+│   Turn left        │
 ├──────────────────────────────┤
 │                              │
 │              ↑               │
@@ -490,15 +512,20 @@ Conceptual interface:
 
 During navigation:
 
-- center the map near the cyclist
+- keep the screen awake until navigation ends
+- keep a fixed cyclist overlay one-third of the screen height above the bottom;
+  move the map beneath it using a 240 m camera distance
+- when browsing manually, replace the overlay with a geographic marker
 - orient the map approximately in movement/heading direction
-- use an explicit MapKit camera with a 45° tilt, centered near the cyclist and oriented using GPS course while moving (at least 1 m/s), with the current route segment as fallback; update with GPS progress and course in portrait and landscape
+- use an explicit MapKit camera with a 45° tilt, centered near the cyclist and oriented using GPS course while moving (at least 1 m/s), with the current route segment as fallback; update with valid GPS position and course in portrait and landscape
 - If GPS course is unavailable, derive travel direction from consecutive fixes at least 5 m apart, each with horizontal accuracy no worse than 50 m. The follow arrow restores this latest travel direction and tilt.
 - use a slightly tilted or forward-looking camera if MapKit allows a clean implementation
 - avoid constantly jumping or overreacting to noisy heading values
 - After the user moves the map manually, keep the camera where they left it until the arrow button is pressed. Resume the navigation camera on that button; progress and rerouting continue while camera following is paused.
 
-Do not make navigation camera logic tightly coupled to route matching.
+Do not make navigation camera logic tightly coupled to route progress changes.
+Position changes must update the camera even when traveled distance stays the
+same. Reject inaccurate navigation fixes before updating the camera.
 
 ---
 
@@ -522,6 +549,8 @@ Do NOT simply look for the closest route vertex.
 
 Project the GPS point onto route segments and find the closest projection.
 
+At overlapping segments, prefer the leg near the previous traveled distance,
+using forward progress to break ties. Keep this continuity rule small.
 The implementation should be unit-tested.
 
 ---
@@ -599,9 +628,13 @@ Replace:
 Show a short UI state:
 
 ```text
-Route wird neu berechnet …
+Recalculating route …
 ```
 
+Keep the navigation summary and fixed marker position unchanged during loading
+and errors. Show status above the summary and allow retry after failure.
+Use one owned routing task. Cancellation clears only that request's state; late
+responses must not replace a newer request.
 Prevent multiple simultaneous rerouting requests.
 
 Add a cooldown so the app does not reroute continuously.
@@ -642,16 +675,16 @@ AVSpeechSynthesizer
 Example announcements:
 
 ```text
-"In 200 Metern links abbiegen."
+"In 200 meters, turn left."
 
-"In 50 Metern rechts abbiegen."
+"In 50 meters, turn right."
 
-"Jetzt links abbiegen."
+"Turn left now."
 
-"Du hast dein Ziel erreicht."
+"You have reached your destination."
 ```
 
-Use the device language / German initially.
+All app text and future speech instructions use English.
 
 Speech logic belongs in `SpeechService`, not directly in a SwiftUI view.
 
@@ -702,7 +735,7 @@ Handle at least:
 Show:
 
 ```text
-Standort wird ermittelt …
+Finding your location …
 ```
 
 ### Location permission denied
@@ -718,8 +751,8 @@ Show a simple retryable message.
 Show:
 
 ```text
-Route konnte nicht berechnet werden.
-Erneut versuchen
+Could not calculate route.
+Try again
 ```
 
 ### No route
@@ -976,7 +1009,10 @@ Use deterministic coordinate fixtures.
 
 # 30. Logging During Development
 
-Add lightweight development logs for:
+Optional later diagnostics, only when needed to investigate a real issue.
+These are not implemented and are not first-release requirements:
+
+Possible development logs:
 
 - current GPS accuracy
 - route distance from GPS
@@ -1007,7 +1043,9 @@ acceptable app usage and request volume with the maintainers before release.
 
 Keep requests limited to route calculation and necessary rerouting. Preserve
 existing rerouting cooldown and error handling. Include BRouter and OpenStreetMap
-credits and explain the third-party routing service in the privacy policy.
+credits (shown in the full-screen search view) and explain the third-party routing
+service in the privacy policy. `PRIVACY.md` is the current draft and still needs
+a public URL before submission.
 
 BRouter's privacy policy says routing coordinates, IP addresses, timestamps,
 requested resources, and user agents are logged for two weeks, with an additional
@@ -1028,6 +1066,9 @@ provider through the existing `RoutingService` boundary.
 ---
 
 # 33. Routing Profile Strategy
+
+The current release uses BRouter's stock `trekking` profile. The preferences
+below describe product intent; custom profile tuning is not implemented.
 
 For the first version, expose exactly one route style:
 
@@ -1077,9 +1118,9 @@ The MVP should have only three meaningful states.
 ## State 1: Destination search
 
 ```text
-Map
-+
-"Where to?" search
+Map + search button
+   ↓
+Full-screen "Where to?" search + suggestions
 ```
 
 ## State 2: Route preview

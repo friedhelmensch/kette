@@ -7,10 +7,7 @@ import Observation
 final class MapViewModel {
     var query = "" {
         didSet {
-            cancelResolution()
-            suggestions = []
-            searchError = nil
-            search.updateQuery(query.trimmingCharacters(in: .whitespacesAndNewlines))
+            retrySearch()
         }
     }
     var isSearching = false
@@ -21,6 +18,7 @@ final class MapViewModel {
     private(set) var searchError: String?
     private(set) var isResolving = false
 
+    private(set) var navigationCoordinate: CLLocationCoordinate2D?
     private(set) var navigationProgress: RouteProgress?
     private(set) var navigationHeadingDegrees: Double?
     private(set) var isNavigating = false
@@ -45,17 +43,14 @@ final class MapViewModel {
 
     func stopNavigation() {
         if isRerouting {
-            rerouteTask?.cancel()
-            routeTask?.cancel()
-            rerouteTask = nil
-            isRouting = false
-            isRerouting = false
+            cancelRoute()
         }
         isNavigating = false
         UIApplication.shared.isIdleTimerDisabled = false
         isFollowingPosition = false
         routeError = nil
         navigationEngine = nil
+        navigationCoordinate = nil
         navigationProgress = nil
         navigationHeadingDegrees = nil
         location.setNavigationActive(false)
@@ -75,9 +70,9 @@ final class MapViewModel {
     private let rerouteCooldownSeconds = 20.0
     private var offRouteFixes = 0
     private var lastRerouteTime: Date?
-    private var rerouteTask: Task<Void, Never>?
     private var navigationEngine: NavigationEngine?
-    private var routeTask: Task<BicycleRoute, Error>?
+    private var routeTask: Task<Void, Never>?
+    private var routeRequestID: UUID?
     private var requestedPermission = false
     private var updatingLocation = false
     private var selectionID = UUID()
@@ -117,28 +112,21 @@ final class MapViewModel {
         }
         if isNavigating { updateNavigationProgress() }
         if currentCoordinate != nil, destination != nil, route == nil, routeError == nil, !isRouting {
-            Task { await calculateRoute() }
+            beginRouteRequest()
         }
     }
 
     private func updateNavigationProgress() {
         guard let coordinate = currentCoordinate, let accuracy = location.horizontalAccuracy,
               let progress = navigationEngine?.progress(at: coordinate, horizontalAccuracy: accuracy) else { return }
+        navigationCoordinate = coordinate
         navigationProgress = progress
         navigationHeadingDegrees = location.course ?? progress.routeHeadingDegrees
         offRouteFixes = progress.distanceFromRouteMeters > offRouteDistanceMeters ? offRouteFixes + 1 : 0
         guard offRouteFixes >= requiredOffRouteFixes, !isRouting, !isRerouting,
               lastRerouteTime.map({ now().timeIntervalSince($0) >= rerouteCooldownSeconds }) ?? true else { return }
         offRouteFixes = 0
-        lastRerouteTime = now()
-        isRerouting = true
-        rerouteTask = Task { [weak self] in
-            guard let self, !Task.isCancelled else { return }
-            await calculateRoute()
-            guard !Task.isCancelled else { return }
-            isRerouting = false
-            rerouteTask = nil
-        }
+        beginRouteRequest()
     }
 
     func select(_ suggestion: SearchSuggestion) async {
@@ -150,10 +138,9 @@ final class MapViewModel {
         do {
             let result = try await search.resolve(suggestion)
             guard selectionID == requestID, !Task.isCancelled else { return }
-            routeTask?.cancel()
+            cancelRoute()
             route = nil
             routeError = nil
-            isRouting = false
             destination = result
             cancelSearch()
             await calculateRoute()
@@ -168,38 +155,70 @@ final class MapViewModel {
     }
 
     func calculateRoute() async {
-        guard !isRouting, let start = currentCoordinate, let destination else { return }
-        if isNavigating {
-            isRerouting = true
-            lastRerouteTime = now()
+        if let routeTask {
+            await routeTask.value
+            return
         }
+        guard let task = beginRouteRequest() else { return }
+        await withTaskCancellationHandler {
+            await task.value
+        } onCancel: {
+            task.cancel()
+        }
+    }
+
+    @discardableResult
+    private func beginRouteRequest() -> Task<Void, Never>? {
+        guard !isRouting, let start = currentCoordinate, let destination else { return nil }
+        let requestID = UUID()
+        routeRequestID = requestID
         isRouting = true
+        isRerouting = isNavigating
+        if isNavigating { lastRerouteTime = now() }
         routeError = nil
-        let task = Task { try await routing.calculateRoute(from: start, to: destination.coordinate) }
-        routeTask = task
-        do {
-            let result = try await withTaskCancellationHandler {
-                try await task.value
-            } onCancel: {
-                task.cancel()
+        let task = Task { [self] in
+            defer {
+                if routeRequestID == requestID {
+                    routeTask = nil
+                    routeRequestID = nil
+                    isRouting = false
+                    isRerouting = false
+                }
             }
-            guard !task.isCancelled else { return }
-            route = result
-            if isNavigating {
-                navigationEngine = NavigationEngine(route: result)
-                offRouteFixes = 0
-                updateNavigationProgress()
-            }
-        } catch {
-            guard !task.isCancelled else { return }
-            if !(error is CancellationError) {
+            do {
+                let result = try await routing.calculateRoute(from: start, to: destination.coordinate)
+                try Task.checkCancellation()
+                guard routeRequestID == requestID else { return }
+                route = result
+                if isNavigating {
+                    navigationEngine = NavigationEngine(route: result)
+                    offRouteFixes = 0
+                    updateNavigationProgress()
+                }
+            } catch {
+                guard routeRequestID == requestID, !Task.isCancelled, !(error is CancellationError) else { return }
                 routeError = error as? RoutingError == .noRoute
                     ? "No bicycle route found."
                     : "Could not calculate route."
             }
         }
+        routeTask = task
+        return task
+    }
+
+    private func cancelRoute() {
+        routeTask?.cancel()
+        routeTask = nil
+        routeRequestID = nil
         isRouting = false
         isRerouting = false
+    }
+
+    func retrySearch() {
+        cancelResolution()
+        suggestions = []
+        searchError = nil
+        search.updateQuery(query.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
     func cancelSearch() {

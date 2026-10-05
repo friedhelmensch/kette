@@ -4,6 +4,42 @@ import CoreLocation
 
 @MainActor
 final class MapRoutingTests: XCTestCase {
+    func testLateCancelledResponseDoesNotClearNewRequestState() async {
+        let (model, routing) = makeModel()
+        var releases: [CheckedContinuation<Void, Never>] = []
+        routing.beforeResponse = { await withCheckedContinuation { releases.append($0) } }
+        let first = Task { await model.select(suggestion) }
+        await routing.waitForCalls(1)
+        let second = Task { await model.select(suggestion) }
+        await routing.waitForCalls(2)
+        releases[0].resume()
+        await first.value
+        XCTAssertTrue(model.isRouting)
+        XCTAssertNil(model.route)
+        releases[1].resume()
+        await second.value
+        XCTAssertFalse(model.isRouting)
+        XCTAssertNotNil(model.route)
+    }
+
+    func testCancelledRequestClearsLoadingAndAllowsRetry() async {
+        let (model, routing) = makeModel()
+        var release: CheckedContinuation<Void, Never>?
+        routing.beforeResponse = { await withCheckedContinuation { release = $0 } }
+        let selection = Task { await model.select(suggestion) }
+        await routing.waitForCalls(1)
+        selection.cancel()
+        release?.resume()
+        await selection.value
+        XCTAssertFalse(model.isRouting)
+        XCTAssertFalse(model.isRerouting)
+        XCTAssertNil(model.routeError)
+        routing.beforeResponse = nil
+        await model.calculateRoute()
+        XCTAssertEqual(routing.starts.count, 2)
+        XCTAssertNotNil(model.route)
+    }
+
     func testSelectingDestinationFetchesRouteFromCurrentLocation() async {
         let (model, routing) = makeModel()
         await model.select(suggestion)
@@ -86,9 +122,17 @@ final class FakeRoutingService: RoutingService {
     var result: BicycleRoute?
     var error: RoutingError?
     var beforeResponse: (() async -> Void)?
+    private var callWaiters: [(Int, CheckedContinuation<Void, Never>)] = []
+    func waitForCalls(_ count: Int) async {
+        if starts.count >= count { return }
+        await withCheckedContinuation { callWaiters.append((count, $0)) }
+    }
     func calculateRoute(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) async throws -> BicycleRoute {
         starts.append(start)
         destinations.append(destination)
+        let ready = callWaiters.filter { $0.0 <= starts.count }
+        callWaiters.removeAll { $0.0 <= starts.count }
+        for (_, waiter) in ready { waiter.resume() }
         await beforeResponse?()
         if let error { throw error }
         if let result { return result }

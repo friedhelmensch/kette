@@ -11,7 +11,7 @@ struct RouteMatcher {
     let geometry: RouteGeometry
 
     /// Projects onto each segment in a local meter-based plane and returns the nearest point.
-    func match(_ coordinate: CLLocationCoordinate2D) -> RouteMatch? {
+    func match(_ coordinate: CLLocationCoordinate2D, previousTraveledDistanceMeters: Double? = nil) -> RouteMatch? {
         var nearest: RouteMatch?
         let latitudeScale = RouteGeometry.earthRadiusMeters * .pi / 180
         for index in geometry.coordinates.indices.dropLast() {
@@ -25,8 +25,20 @@ struct RouteMatcher {
             let squaredLength = dx * dx + dy * dy
             let fraction = squaredLength > 0 ? min(1, max(0, (px * dx + py * dy) / squaredLength)) : 0
             let distance = hypot(px - fraction * dx, py - fraction * dy)
-            if distance < (nearest?.distanceFromRouteMeters ?? .infinity) {
-                let segmentLength = geometry.cumulativeDistances[index + 1] - geometry.cumulativeDistances[index]
+            let segmentLength = geometry.cumulativeDistances[index + 1] - geometry.cumulativeDistances[index]
+            let traveled = geometry.cumulativeDistances[index] + fraction * segmentLength
+            let isCloser = distance < (nearest?.distanceFromRouteMeters ?? .infinity)
+            var preferContinuity = false
+            if let previous = previousTraveledDistanceMeters, let nearest,
+               abs(distance - nearest.distanceFromRouteMeters) < 1 {
+                // At overlapping segments, stay near the last progress and prefer the forward leg on a tie.
+                let candidateDelta = traveled - previous
+                let nearestDelta = nearest.traveledDistanceMeters - previous
+                preferContinuity = abs(candidateDelta) < abs(nearestDelta)
+                    || (abs(abs(candidateDelta) - abs(nearestDelta)) < 0.01 && candidateDelta > nearestDelta)
+                if !preferContinuity { continue }
+            }
+            if isCloser || preferContinuity {
                 nearest = RouteMatch(
                     coordinate: CLLocationCoordinate2D(
                         latitude: start.latitude + fraction * (end.latitude - start.latitude),

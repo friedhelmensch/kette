@@ -46,7 +46,7 @@ struct MainMapView: View {
                 if ProcessInfo.processInfo.arguments.contains("-ui-testing-camera") {
                     renderedCameraAngles = "\(context.camera.heading)|\(context.camera.pitch)"
                 }
-                if ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") {
+                if ProcessInfo.processInfo.arguments.contains("-ui-testing-launch-location") || ProcessInfo.processInfo.arguments.contains("-ui-testing-position-camera") {
                     renderedCameraAngles = "\(context.camera.centerCoordinate.latitude)|\(context.camera.centerCoordinate.longitude)"
                 }
                 #endif
@@ -74,11 +74,7 @@ struct MainMapView: View {
                 VStack(spacing: 8) {
                     Button {
                         model.resumeFollowingPosition()
-                        if model.isNavigating {
-                            updateNavigationCamera(animated: false)
-                        } else {
-                            camera = .userLocation(followsHeading: false, fallback: .automatic)
-                        }
+                        updateFollowingCamera(animated: false)
                     } label: {
                         Image(systemName: model.isFollowingPosition ? "location.fill" : "location")
                             .font(.title3)
@@ -111,16 +107,11 @@ struct MainMapView: View {
             }
             .task { model.start() }
             .fullScreenCover(isPresented: $model.isSearching) {
-                DestinationSearchView(model: model, isFullScreen: true)
+                DestinationSearchView(model: model)
             }
             .onChange(of: [model.currentCoordinate?.latitude, model.currentCoordinate?.longitude], initial: true) { _, _ in
-                guard model.isFollowingPosition, !model.isNavigating, model.destination == nil,
-                      let coordinate = model.currentCoordinate else { return }
-                camera = .region(MKCoordinateRegion(
-                    center: coordinate,
-                    latitudinalMeters: 1_000,
-                    longitudinalMeters: 1_000
-                ))
+                guard !model.isNavigating else { return }
+                updateFollowingCamera(animated: false)
             }
             .onChange(of: camera.positionedByUser) { _, positionedByUser in
                 if positionedByUser { model.pauseFollowingPosition() }
@@ -130,7 +121,7 @@ struct MainMapView: View {
             }
             .onChange(of: model.route?.id) { _, _ in
                 if model.isNavigating {
-                    updateNavigationCamera()
+                    updateFollowingCamera()
                 } else if let route = model.route {
                     model.pauseFollowingPosition()
                     camera = .rect(RoutePreview(route: route).mapRect)
@@ -138,13 +129,13 @@ struct MainMapView: View {
             }
             .onChange(of: model.isNavigating) { _, navigating in
                 if navigating {
-                    updateNavigationCamera()
+                    updateFollowingCamera()
                 } else if let route = model.route {
                     camera = .rect(RoutePreview(route: route).mapRect)
                 }
             }
-            .onChange(of: [model.navigationProgress?.traveledDistanceMeters, model.navigationHeadingDegrees]) { _, _ in
-                if model.isNavigating { updateNavigationCamera() }
+            .onChange(of: [model.navigationCoordinate?.latitude, model.navigationCoordinate?.longitude, model.navigationHeadingDegrees]) { _, _ in
+                if model.isNavigating { updateFollowingCamera() }
             }
             .onChange(of: model.destination) { _, destination in
                 guard let destination else { return }
@@ -171,9 +162,17 @@ struct MainMapView: View {
                     .background(.regularMaterial, in: Capsule())
             }
         } else {
-            DestinationSearchView(model: model)
-                .padding(.horizontal)
-                .padding(.top, 8)
+            Button { model.isSearching = true } label: {
+                Label("Where to?", systemImage: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+            }
+            .accessibilityLabel("Where to?")
+            .accessibilityIdentifier("destinationSearch")
+            .padding(.horizontal)
+            .padding(.top, 8)
         }
     }
 
@@ -203,13 +202,26 @@ struct MainMapView: View {
             .padding()
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
             .padding()
+        } else if model.isNavigating, let progress = model.navigationProgress {
+            NavigationSummaryView(
+                progress: progress,
+                stop: model.stopNavigation,
+                status: model.isRerouting ? "Recalculating route …" : model.routeError,
+                retry: model.routeError == nil ? nil : { Task { await model.calculateRoute() } }
+            )
+        } else if model.isNavigating {
+            HStack {
+                Label("Navigation", systemImage: "location.fill")
+                Spacer()
+                Button("End", action: model.stopNavigation)
+                    .accessibilityIdentifier("stopNavigation")
+            }
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+            .padding()
         } else if model.isRouting {
             VStack(spacing: 8) {
-                ProgressView(model.isRerouting ? "Recalculating route …" : "Calculating route …")
-                if model.isNavigating {
-                    Button("End", action: model.stopNavigation)
-                        .accessibilityIdentifier("stopNavigation")
-                }
+                ProgressView("Calculating route …")
             }
             .padding()
             .background(.regularMaterial, in: Capsule())
@@ -221,22 +233,6 @@ struct MainMapView: View {
                 Button("Try again") {
                     Task { await model.calculateRoute() }
                 }
-                if model.isNavigating {
-                    Button("End", action: model.stopNavigation)
-                        .accessibilityIdentifier("stopNavigation")
-                }
-            }
-            .padding()
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
-            .padding()
-        } else if model.isNavigating, let progress = model.navigationProgress {
-            NavigationSummaryView(progress: progress, stop: model.stopNavigation)
-        } else if model.isNavigating {
-            HStack {
-                Label("Navigation", systemImage: "location.fill")
-                Spacer()
-                Button("End", action: model.stopNavigation)
-                    .accessibilityIdentifier("stopNavigation")
             }
             .padding()
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
@@ -252,10 +248,17 @@ struct MainMapView: View {
         }
     }
 
-    private func updateNavigationCamera(animated: Bool = true) {
-        guard model.isFollowingPosition, let coordinate = model.currentCoordinate,
-              let heading = model.navigationHeadingDegrees else { return }
-        let position = Self.navigationCamera(at: coordinate, heading: heading)
+    private func updateFollowingCamera(animated: Bool = true) {
+        guard model.isFollowingPosition else { return }
+        let position: MapCameraPosition
+        if model.isNavigating {
+            guard let coordinate = model.navigationCoordinate,
+                  let heading = model.navigationHeadingDegrees else { return }
+            position = Self.navigationCamera(at: coordinate, heading: heading)
+        } else {
+            guard let coordinate = model.currentCoordinate else { return }
+            position = .region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1_000, longitudinalMeters: 1_000))
+        }
         if animated {
             withAnimation(.linear(duration: 0.5)) { camera = position }
         } else {

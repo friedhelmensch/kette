@@ -2,16 +2,72 @@ import XCTest
 
 final class KETTEUITests: XCTestCase {
     @MainActor
+    func testFollowArrowTracksLocationAfterReturningToPreview() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing-route-preview", "-ui-testing-moving-location", "-ui-testing-planning-location", "-ui-testing-position-camera"]
+        app.launch()
+        XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 10))
+        app.buttons["startNavigation"].tap()
+        app.buttons["stopNavigation"].tap()
+        app.buttons["resumeFollowing"].tap()
+        let map = app.otherElements["mainMap"]
+        let initial = map.value as? String
+        let moved = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (map.value as? String) != initial
+        }, object: map)
+        XCTAssertEqual(XCTWaiter.wait(for: [moved], timeout: 4), .completed)
+        XCTAssertEqual(app.buttons["resumeFollowing"].value as? String, "Active")
+    }
+
+    @MainActor
+    func testReroutingKeepsSummaryAndCyclistPositionVisible() {
+        let app = XCUIApplication()
+        XCUIDevice.shared.orientation = .portrait
+        app.launchArguments = ["-ui-testing-route-preview", "-ui-testing-moving-location", "-ui-testing-perpendicular-location", "-ui-testing-reroute-error"]
+        app.launch()
+        XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 10))
+        app.buttons["startNavigation"].tap()
+        let marker = app.otherElements["fixedCyclist"]
+        let initialY = marker.frame.midY
+        XCTAssertTrue(app.staticTexts["Recalculating route …"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["remainingDuration"].isHittable)
+        XCTAssertTrue(app.staticTexts["remainingDistance"].isHittable)
+        XCTAssertEqual(marker.frame.midY, initialY, accuracy: 1)
+        XCTAssertTrue(app.staticTexts["Could not calculate route."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["remainingDuration"].isHittable)
+        XCTAssertTrue(app.buttons["stopNavigation"].isHittable)
+        XCTAssertEqual(marker.frame.midY, initialY, accuracy: 1)
+    }
+
+    @MainActor
+    func testNavigationCameraTracksMovementPerpendicularToRoute() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing-route-preview", "-ui-testing-moving-location", "-ui-testing-perpendicular-location", "-ui-testing-position-camera"]
+        app.launch()
+        XCTAssertTrue(app.buttons["startNavigation"].waitForExistence(timeout: 10))
+        app.buttons["startNavigation"].tap()
+        let map = app.otherElements["mainMap"]
+        let moved = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            guard let value = map.value as? String,
+                  let latitude = Double(value.split(separator: "|").first.map(String.init) ?? "") else { return false }
+            return latitude > 52.5201
+        }, object: map)
+        XCTAssertEqual(XCTWaiter.wait(for: [moved], timeout: 3), .completed, "Camera: \(String(describing: map.value))")
+    }
+
+    @MainActor
     func testSearchCoversMapAndReturnsToMapAfterCancelOrSelection() {
         let app = XCUIApplication()
         XCUIDevice.shared.orientation = .portrait
         defer { XCUIDevice.shared.orientation = .portrait }
         app.launchArguments = ["-ui-testing-search"]
         app.launch()
-        let search = app.textFields["destinationSearch"]
+        let search = app.buttons["destinationSearch"]
         XCTAssertTrue(search.waitForExistence(timeout: 10))
         search.tap()
         XCTAssertTrue(app.otherElements["destinationSearchScreen"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.links["BRouter"].exists)
+        XCTAssertTrue(app.links["© OpenStreetMap contributors"].exists)
         let activeSearch = app.textFields["activeDestinationSearch"]
         activeSearch.typeText("Potsdamer")
         XCTAssertTrue(app.buttons["Potsdamer Platz, Berlin"].waitForExistence(timeout: 3))
@@ -23,7 +79,7 @@ final class KETTEUITests: XCTestCase {
         add(portrait)
         app.buttons["cancelSearch"].tap()
         XCTAssertTrue(app.otherElements["mainMap"].isHittable)
-        XCTAssertEqual(search.value as? String, "Where to?")
+        XCTAssertEqual(search.label, "Where to?")
         XCUIDevice.shared.orientation = .landscapeLeft
         search.tap()
         activeSearch.typeText("Potsdamer")
@@ -212,12 +268,12 @@ final class KETTEUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.otherElements["mainMap"].waitForExistence(timeout: 10))
-        let search = app.textFields["destinationSearch"]
+        let search = app.buttons["destinationSearch"]
         XCTAssertTrue(search.exists)
         search.tap()
         app.textFields["activeDestinationSearch"].typeText("Berlin")
         XCTAssertTrue(app.buttons["cancelSearch"].exists)
         app.buttons["cancelSearch"].tap()
-        XCTAssertEqual(search.value as? String, "Where to?")
+        XCTAssertEqual(search.label, "Where to?")
     }
 }

@@ -60,6 +60,18 @@ final class MapViewModelTests: XCTestCase {
         XCTAssertEqual(location.startRequests, 1)
     }
 
+    func testRetrySearchClearsErrorAndRequestsSameQueryAgain() {
+        let search = FakeSearchService()
+        let model = MapViewModel(location: FakeLocationService(), search: search)
+        model.query = "Berlin"
+        search.errorMessage = "Search failed."
+        search.onChange?()
+        model.retrySearch()
+        XCTAssertEqual(search.queries, ["Berlin", "Berlin"])
+        XCTAssertNil(model.searchError)
+        XCTAssertTrue(model.suggestions.isEmpty)
+    }
+
     func testQueryIsForwardedAndEmptyQueryClearsSuggestions() {
         let search = FakeSearchService()
         let model = MapViewModel(location: FakeLocationService(), search: search)

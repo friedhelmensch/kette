@@ -24,7 +24,8 @@ private final class FixtureLocationService: LocationProviding {
     let authorization = CLAuthorizationStatus.authorizedWhenInUse
     let horizontalAccuracy: Double? = 5
     var course: Double? {
-        ProcessInfo.processInfo.arguments.contains("-ui-testing-travel-course") ? 120 : nil
+        if ProcessInfo.processInfo.arguments.contains("-ui-testing-perpendicular-location") { return 0 }
+        return ProcessInfo.processInfo.arguments.contains("-ui-testing-travel-course") ? 120 : nil
     }
     var coordinate: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 52.52, longitude: 13.405)
     private var movementTask: Task<Void, Never>?
@@ -41,11 +42,12 @@ private final class FixtureLocationService: LocationProviding {
     }
     func setNavigationActive(_ active: Bool) {
         movementTask?.cancel()
-        guard active, ProcessInfo.processInfo.arguments.contains("-ui-testing-moving-location") else { return }
+        guard active || ProcessInfo.processInfo.arguments.contains("-ui-testing-planning-location"),
+              ProcessInfo.processInfo.arguments.contains("-ui-testing-moving-location") else { return }
         movementTask = Task {
             for step in 1...15 {
                 do { try await Task.sleep(for: .seconds(1)) } catch { return }
-                coordinate = CLLocationCoordinate2D(latitude: 52.52 + Double(step) * 0.00015, longitude: 13.405 + Double(step) * 0.00015)
+                coordinate = CLLocationCoordinate2D(latitude: 52.52 + Double(step) * 0.00015, longitude: 13.405 + (ProcessInfo.processInfo.arguments.contains("-ui-testing-perpendicular-location") ? 0 : Double(step) * 0.00015))
                 onChange?()
             }
         }
@@ -69,9 +71,18 @@ private final class FixtureSearchService: DestinationSearching {
 }
 
 @MainActor
-private struct FixtureRoutingService: RoutingService {
+private final class FixtureRoutingService: RoutingService {
+    private var calls = 0
     func calculateRoute(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) async throws -> BicycleRoute {
-        let coordinates = [start, CLLocationCoordinate2D(latitude: 52.535, longitude: 13.42), destination]
+        calls += 1
+        if calls > 1, ProcessInfo.processInfo.arguments.contains("-ui-testing-reroute-error") {
+            try await Task.sleep(for: .seconds(3))
+            throw RoutingError.httpStatus(503)
+        }
+        let waypoint = ProcessInfo.processInfo.arguments.contains("-ui-testing-perpendicular-location")
+            ? CLLocationCoordinate2D(latitude: start.latitude, longitude: start.longitude + 0.02)
+            : CLLocationCoordinate2D(latitude: 52.535, longitude: 13.42)
+        let coordinates = [start, waypoint, destination]
         let geometry = RouteGeometry(coordinates: coordinates)
         return BicycleRoute(coordinates: coordinates, distanceMeters: 12_400, estimatedDurationSeconds: 2_520, maneuvers: [
             RouteManeuver(coordinate: coordinates[1], type: .left, distanceFromRouteStartMeters: geometry.cumulativeDistances[1]),
